@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)Monster_Chase;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)HeapManager;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -102,7 +102,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManger.lib;$(OutDir)JobSystem.lib;$(SolutionDir)Exports\GLib\GLib_x64-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManager.lib;$(OutDir)JobSystem.lib;$(SolutionDir)Exports\GLib\GLib_x64-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -114,13 +114,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)Monster_Chase;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)HeapManager;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Exports\GLib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManger.lib;$(OutDir)JobSystem.lib;d3d11.lib;$(SolutionDir)Exports\GLib\GLib_x86-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManager.lib;$(OutDir)JobSystem.lib;d3d11.lib;$(SolutionDir)Exports\GLib\GLib_x86-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,13 +132,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)Monster_Chase;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)HeapManager;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Exports\GLib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManger.lib;$(OutDir)JobSystem.lib;d3d11.lib;GLib_$(PlatformTarget)-$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManager.lib;$(OutDir)JobSystem.lib;d3d11.lib;GLib_$(PlatformTarget)-$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)Monster_Chase;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameEngine;$(SolutionDir)HeapManager;$(SolutionDir)GLib;$(SolutionDir)nlohmann;$(SolutionDir)jobsystem-lambda-conversion;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,7 +161,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManger.lib;$(OutDir)JobSystem.lib;$(SolutionDir)Exports\GLib\GLib_x86-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)GameEngine.lib;$(OutDir)HeapManager.lib;$(OutDir)JobSystem.lib;$(SolutionDir)Exports\GLib\GLib_x86-Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
