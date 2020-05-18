@@ -1,0 +1,22 @@
+{
+  "name": "Ghost",
+  "initial_position": [ -1100.0, -300.0 ],
+  "components": {
+    "physics_data": {
+      "mass": 50.0,
+      "movable": true,
+      
+      "cur_vel": [ 0.0, 50.0 ]
+    },
+    "render_data": {
+      "channel": "OverlapAll",
+      "sprite": "data\\ghost.dds"
+    }
+  },
+  "controller": {
+    "type": "AI",
+    "initializer": {
+      "decay_rate": 5.0
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Horizontal",
+  "initial_position": [ 0.0, 450.0 ],
+  "components": {
+    "physics_data": {
+      "mass": 50.0,
+      "movable": false,
+      "cur_vel": [ 0.0, 0.0 ]
+    },
+    "render_data": {
+      "channel": "Static",
+      "sprite": "data\\horizontal.dds"
+    }
+  },
+  "controller": {
+    "type": "AI",
+    "initializer": {
+      "decay_rate": 5.0
+    }
+  }
+}

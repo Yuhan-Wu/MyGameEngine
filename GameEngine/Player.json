@@ -1,0 +1,20 @@
+{
+  "name": "Yuhan",
+  "initial_position": [ 500.0, 50.0 ],
+  "components": {
+    "physics_data": {
+      "mass": 50.0,
+      "movable": true,
+      "cur_vel": [ 0.0, 0.0 ]
+    },
+    "render_data": {
+      "channel": "Player",
+      "sprite": "data\\mario.dds"
+    }
+  },
+  "controller": {
+    "type": "Player",
+    "initializer": {
+    }
+  }
+}

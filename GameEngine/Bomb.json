@@ -1,0 +1,21 @@
+{
+  "name": "Bomb",
+  "initial_position": [ -1500.0, 0 ],
+  "components": {
+    "physics_data": {
+      "mass": 50.0,
+      "movable": true,
+      "cur_vel": [ -150.0, -150.0 ]
+    },
+    "render_data": {
+      "channel": "Pawn",
+      "sprite": "data\\bomb.dds"
+    }
+  },
+  "controller": {
+    "type": "AI",
+    "initializer": {
+      "decay_rate": 5.0
+    }
+  }
+}

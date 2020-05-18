@@ -1,0 +1,22 @@
+{
+  "name": "Turtle",
+  "initial_position": [ -800.0, -800.0 ],
+  "components": {
+    "physics_data": {
+      "mass": 50.0,
+      "movable": true,
+      
+      "cur_vel": [ 130.0, 0.0 ]
+    },
+    "render_data": {
+      "channel": "OverlapAll",
+      "sprite": "data\\turtle.dds"
+    }
+  },
+  "controller": {
+    "type": "AI",
+    "initializer": {
+      "decay_rate": 5.0
+    }
+  }
+}
