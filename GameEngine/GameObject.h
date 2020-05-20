@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Point2D.h"
+#include "IGameObjectComponent.h"
 #include "IGameObjectController.h"
 #include "HeapManager.h"
 #include "HeapManagerProxy.h"
@@ -48,6 +49,7 @@ public:
 	char* name;
 
 	void Attach(IGameObjectController* controller);
+	void Attach(IGameObjectComponent* component);
 
 	void BeginUpdate(float delta_time);
 	void Update(float delta_time);
@@ -55,11 +57,12 @@ public:
 
 	void ReleaseAll();
 
-	IGameObjectController* GetPhysics();
-	IGameObjectController* GetCollision();
+	IGameObjectComponent* GetPhysics();
+	IGameObjectComponent* GetCollision();
 
 protected:
 	int nameLength;
+	std::vector<IGameObjectComponent*> component_list;
 	std::vector<IGameObjectController*> controller_list;
 
 private:

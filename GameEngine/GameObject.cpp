@@ -17,7 +17,6 @@ GameObject::GameObject()
 	memcpy(GameObject::name, defaultname, (nameLength) * sizeof(char));
 	GameObject::position2D = new Point2D(0, 0);
 	RotZ = 0;
-	// Engine::regist(this);
 }
 
 GameObject::GameObject(const char* name, size_t length, Point2D* position2D, float rotation) {
@@ -41,7 +40,6 @@ GameObject::GameObject(const char* name, size_t length, Point2D* position2D, flo
 		delete position2D;
 	}
 	RotZ = rotation;
-	// Engine::regist(this);
 }
 
 GameObject::GameObject(const GameObject& other) {
@@ -50,7 +48,6 @@ GameObject::GameObject(const GameObject& other) {
 	this->position2D = new Point2D();
 	this->position2D = other.position2D;
 	RotZ = other.RotZ;
-	// Engine::regist(this);
 }
 
 GameObject::~GameObject()
@@ -61,14 +58,6 @@ GameObject::~GameObject()
 		delete position2D;
 		position2D = nullptr;
 	}
-	/*
-	while (controller_list.size() != 0) {
-		IGameObjectController* controller = controller_list.back();
-		controller_list.pop_back();
-		delete controller;
-	}
-	*/
-	// if(sprites) GLib::Sprites::Release(sprites);
 }
 
 GameObject& GameObject::operator= (const GameObject& other) {
@@ -82,6 +71,13 @@ void GameObject::Attach(IGameObjectController* controller) {
 	if (controller) {
 		controller_list.push_back(controller);
 		controller->SetParent(this);
+	}
+}
+
+void GameObject::Attach(IGameObjectComponent* component) {
+	if (component) {
+		component_list.push_back(component);
+		component->SetParent(this);
 	}
 }
 
@@ -123,19 +119,19 @@ void GameObject::EndUpdate(float delta_time)
 	}
 }
 
-IGameObjectController* GameObject::GetPhysics() {
-	for (IGameObjectController* controller : controller_list) {
-		if (controller->Name() == "PhysicsInfo") {
-			return controller;
+IGameObjectComponent* GameObject::GetPhysics() {
+	for (IGameObjectComponent* component : component_list) {
+		if (component->Name() == "PhysicsInfo") {
+			return component;
 		}
 	}
 	return nullptr;
 }
 
-IGameObjectController* GameObject::GetCollision() {
-	for (IGameObjectController* controller : controller_list) {
-		if (controller->Name() == "BoxCollision") {
-			return controller;
+IGameObjectComponent* GameObject::GetCollision() {
+	for (IGameObjectComponent* component : component_list) {
+		if (component->Name() == "BoxCollision") {
+			return component;
 		}
 	}
 	return nullptr;

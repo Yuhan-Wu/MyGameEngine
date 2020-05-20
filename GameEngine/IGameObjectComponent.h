@@ -6,7 +6,7 @@
 
 class GameObject;
 
-class IGameObjectController
+class IGameObjectComponent
 {
 public:
 	static void* operator new(size_t size) {
@@ -22,7 +22,7 @@ public:
 		return alloc(HeapManager::GetInstance(), size);
 	}
 
-	static void operator delete(void* pointer) {
+		static void operator delete(void* pointer) {
 		using namespace HeapManagerProxy;
 		free(HeapManager::GetInstance(), pointer);
 	}
@@ -31,13 +31,13 @@ public:
 		free(HeapManager::GetInstance(), pointer);
 	}
 
-	virtual void BeginUpdate(float delta_time)
+		virtual void BeginUpdate(float delta_time)
 	{}
 	virtual void Update(float delta_time)
 	{}
 	virtual void EndUpdate(float delta_time)
 	{}
-	virtual void ReleaseExtra() 
+	virtual void ReleaseExtra()
 	{}
 	void SetParent(GameObject* parent) {
 		this->parent = parent;

@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-class PhysicsInfo: public IGameObjectController
+class PhysicsInfo: public IGameObjectComponent
 {
 public:
 	struct PhysicsData {

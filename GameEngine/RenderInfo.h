@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "GLib.h"
 
-class RenderInfo: public IGameObjectController
+class RenderInfo: public IGameObjectComponent
 {
 public:
 	struct Renderable {

@@ -1,10 +1,9 @@
 #pragma once
+
 #include "GameObject.h"
 #include "Matrix44.h"
 
-// TODO: Come back and complete other functions for later assignments
-
-class BoxCollision : public IGameObjectController
+class BoxCollision : public IGameObjectComponent
 {
 public:
 	struct CollisionData {
