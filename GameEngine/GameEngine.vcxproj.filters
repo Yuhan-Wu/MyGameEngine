@@ -105,6 +105,15 @@
     <ClInclude Include="ComponentType.h">
       <Filter>Header Files\GameComponent</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix44-inln.h">
+      <Filter>Header Files\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2D-inln.h">
+      <Filter>Header Files\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4-inln.h">
+      <Filter>Header Files\GameData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">

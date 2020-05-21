@@ -125,4 +125,5 @@ IGameObjectComponent* GameObject::GetComponent(ComponentType p_RequiredType) {
 			return component;
 		}
 	}
+	return nullptr;
 }

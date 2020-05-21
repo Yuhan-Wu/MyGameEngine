@@ -181,16 +181,19 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IGameObjectComponent.h" />
     <ClInclude Include="IGameObjectController.h" />
+    <ClInclude Include="Matrix44-inln.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysicsInfo.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="Point2D-inln.h" />
     <ClInclude Include="Point2D.h" />
     <ClInclude Include="ProcessFile.h" />
     <ClInclude Include="RefCount.h" />
     <ClInclude Include="RenderInfo.h" />
     <ClInclude Include="SmartPointer.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vector4-inln.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WeakPointer.h" />
   </ItemGroup>
