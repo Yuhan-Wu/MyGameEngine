@@ -57,8 +57,7 @@ public:
 
 	void ReleaseAll();
 
-	IGameObjectComponent* GetPhysics();
-	IGameObjectComponent* GetCollision();
+	IGameObjectComponent* GetComponent(ComponentType);
 
 protected:
 	int nameLength;

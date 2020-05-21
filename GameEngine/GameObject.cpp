@@ -119,20 +119,10 @@ void GameObject::EndUpdate(float delta_time)
 	}
 }
 
-IGameObjectComponent* GameObject::GetPhysics() {
+IGameObjectComponent* GameObject::GetComponent(ComponentType p_RequiredType) {
 	for (IGameObjectComponent* component : component_list) {
-		if (component->Name() == "PhysicsInfo") {
+		if (component->Name() == p_RequiredType) {
 			return component;
 		}
 	}
-	return nullptr;
-}
-
-IGameObjectComponent* GameObject::GetCollision() {
-	for (IGameObjectComponent* component : component_list) {
-		if (component->Name() == "BoxCollision") {
-			return component;
-		}
-	}
-	return nullptr;
 }

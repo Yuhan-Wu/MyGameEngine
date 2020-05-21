@@ -2,7 +2,7 @@
 
 #include "HeapManager.h"
 #include "HeapManagerProxy.h"
-#include <string>
+#include "ComponentType.h"
 
 class GameObject;
 
@@ -42,7 +42,7 @@ public:
 	void SetParent(GameObject* parent) {
 		this->parent = parent;
 	}
-	virtual std::string Name() = 0;
+	virtual ComponentType Name() = 0;
 
 protected:
 	GameObject* parent;

@@ -92,7 +92,7 @@ namespace Engine {
 			// 2D
 			// A
 			Matrix44 AToWorld = Box_A->GetMatrixToWorld();
-			Point2D VelA = reinterpret_cast<PhysicsInfo*>(Object_A->GetPhysics())->GetCurVel();
+			Point2D VelA = reinterpret_cast<PhysicsInfo*>(Object_A->GetComponent(ComponentType::PhysicsInfo))->GetCurVel();
 			Vector4 VelVectorA(VelA);
 			Vector4 BBCenterVectorA(Box_A->GetCenter(), 1);
 			Vector4 BBCenterInWorldA = BBCenterVectorA * AToWorld;
@@ -103,7 +103,7 @@ namespace Engine {
 
 			// B
 			Matrix44 BToWorld = Box_B->GetMatrixToWorld();
-			Point2D VelB = reinterpret_cast<PhysicsInfo*>(Object_B->GetPhysics())->GetCurVel();
+			Point2D VelB = reinterpret_cast<PhysicsInfo*>(Object_B->GetComponent(ComponentType::PhysicsInfo))->GetCurVel();
 			Vector4 VelVectorB(VelB);
 			Vector4 BBCenterVectorB(Box_B->GetCenter(), 1);
 			Vector4 BBCenterInWorldB = BBCenterVectorB * BToWorld;
@@ -208,27 +208,27 @@ namespace Engine {
 		}
 
 		void ReflectVel(SmartPointer<GameObject> CurObject, Vector4 Normal) {
-			Point2D CurVel = reinterpret_cast<PhysicsInfo*>(CurObject->GetPhysics())->GetCurVel();
+			Point2D CurVel = reinterpret_cast<PhysicsInfo*>(CurObject->GetComponent(ComponentType::PhysicsInfo))->GetCurVel();
 			Point2D Normal2D(Normal.X(), Normal.Y());
 			if (CurVel * Normal2D > 0) {
 				Normal2D = -Normal2D;
 			}
 			Point2D RefVel = CurVel - 2 * (CurVel * Normal2D) * Normal2D;
- 			reinterpret_cast<PhysicsInfo*>(CurObject->GetPhysics())->SetCurVel(RefVel);
+ 			reinterpret_cast<PhysicsInfo*>(CurObject->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(RefVel);
 		}
 
 		void ReflectBothVel(SmartPointer<GameObject> Object1, SmartPointer<GameObject> Object2) {
-			Point2D CurVel1 = reinterpret_cast<PhysicsInfo*>(Object1->GetPhysics())->GetCurVel();
-			float Mass1 = reinterpret_cast<PhysicsInfo*>(Object1->GetPhysics())->GetMass();
+			Point2D CurVel1 = reinterpret_cast<PhysicsInfo*>(Object1->GetComponent(ComponentType::PhysicsInfo))->GetCurVel();
+			float Mass1 = reinterpret_cast<PhysicsInfo*>(Object1->GetComponent(ComponentType::PhysicsInfo))->GetMass();
 
-			Point2D CurVel2 = reinterpret_cast<PhysicsInfo*>(Object2->GetPhysics())->GetCurVel();
-			float Mass2 = reinterpret_cast<PhysicsInfo*>(Object2->GetPhysics())->GetMass();
+			Point2D CurVel2 = reinterpret_cast<PhysicsInfo*>(Object2->GetComponent(ComponentType::PhysicsInfo))->GetCurVel();
+			float Mass2 = reinterpret_cast<PhysicsInfo*>(Object2->GetComponent(ComponentType::PhysicsInfo))->GetMass();
 
 			Point2D RefVel1 = ((Mass1 - Mass2) / (Mass1 + Mass2)) * CurVel1 + ((2 * Mass2) / (Mass1 + Mass2)) * CurVel2;
 			Point2D RefVel2 = ((Mass2 - Mass1) / (Mass1 + Mass2)) * CurVel2 + ((2 * Mass1) / (Mass1 + Mass2)) * CurVel1;
 
-			reinterpret_cast<PhysicsInfo*>(Object1->GetPhysics())->SetCurVel(RefVel1);
-			reinterpret_cast<PhysicsInfo*>(Object2->GetPhysics())->SetCurVel(RefVel2);
+			reinterpret_cast<PhysicsInfo*>(Object1->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(RefVel1);
+			reinterpret_cast<PhysicsInfo*>(Object2->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(RefVel2);
 		}
 
 		void RecursiveCheck(float end, float earliest) {
@@ -238,13 +238,13 @@ namespace Engine {
 			float earliest_collision = earliest;
 			for (int i = 0; i < static_cast<int>(World_GameObject->size()) - 1; i++) {
 				SmartPointer<GameObject> Object_A = (*World_GameObject)[i];
-				BoxCollision* Box_A = reinterpret_cast<BoxCollision*>(Object_A->GetCollision());
+				BoxCollision* Box_A = reinterpret_cast<BoxCollision*>(Object_A->GetComponent(ComponentType::BoxCollision));
 				if (Box_A->GetChannel() == "UI") {
 					continue;
 				}
 				for (int j = i + 1; j < static_cast<int>(World_GameObject->size()); j++) {
 					SmartPointer<GameObject> Object_B = (*World_GameObject)[j];
-					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetCollision());
+					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetComponent(ComponentType::BoxCollision));
 					if (Box_B->GetChannel() == "UI") {
 						continue;
 					}
@@ -279,9 +279,9 @@ namespace Engine {
 
 				// Response
 				// Response 1: one is movable, the other is not
-				if (!reinterpret_cast<PhysicsInfo*>(Object1->GetPhysics())->GetMovability()) {
+				if (!reinterpret_cast<PhysicsInfo*>(Object1->GetComponent(ComponentType::PhysicsInfo))->GetMovability()) {
 					ReflectVel(Object2, collision_normal);
-				}else if (!reinterpret_cast<PhysicsInfo*>(Object2->GetPhysics())->GetMovability()) {
+				}else if (!reinterpret_cast<PhysicsInfo*>(Object2->GetComponent(ComponentType::PhysicsInfo))->GetMovability()) {
 					ReflectVel(Object1, collision_normal);
 				}
 				else {
@@ -498,7 +498,7 @@ void Engine::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> Playe
 			}
 
 		}
-		reinterpret_cast<PhysicsInfo*>(Player->GetPhysics())->SetCurVel(vel);
+		reinterpret_cast<PhysicsInfo*>(Player->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(vel);
 
 		AddNewGameObject(Player);
 	}

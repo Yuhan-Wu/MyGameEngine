@@ -36,8 +36,8 @@ public:
 	void BeginUpdate(float) override;
 	void ReleaseExtra() override;
 	
-	std::string Name() override{
-		return "PhysicsInfo";
+	ComponentType Name() override{
+		return ComponentType::PhysicsInfo;
 	}
 
 private:

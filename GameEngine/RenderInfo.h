@@ -22,8 +22,8 @@ public:
 
 	void EndUpdate(float) override;
 	void ReleaseExtra() override;
-	std::string Name() override{
-		return "RenderInfo";
+	ComponentType Name() override{
+		return ComponentType::RenderInfo;
 	}
 private:
 	void Render();

@@ -102,6 +102,9 @@
     <ClInclude Include="RenderInfo.h">
       <Filter>Header Files\GameComponent</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentType.h">
+      <Filter>Header Files\GameComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">

@@ -31,8 +31,8 @@ public:
 
 	void SetCollided(bool);
 
-	std::string Name() override {
-		return "BoxCollision";
+	ComponentType Name() override {
+		return ComponentType::BoxCollision;
 	}
 
 private:
