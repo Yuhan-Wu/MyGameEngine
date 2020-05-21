@@ -17,8 +17,8 @@ BoxCollision::BoxCollision(SmartPointer<GameObject> p_GameObject, Point2D p_Cent
 	Data = temp;
 	Channel = new std::string(channel);
 
-	Matrix44 trans_AToWorld = Matrix44::CreateTranslationR(*(p_GameObject->position2D));
-	Matrix44 rot_AToWorld = Matrix44::CreateZRotationR(p_GameObject->RotZ);
+	Matrix44 trans_AToWorld = Matrix44::CreateTranslationR(p_GameObject->m_Position2D);
+	Matrix44 rot_AToWorld = Matrix44::CreateZRotationR(p_GameObject->m_RotZ);
 	Matrix44 cons = trans_AToWorld * rot_AToWorld;
 
 	Game_Object = p_GameObject;
@@ -32,8 +32,8 @@ BoxCollision :: ~BoxCollision()
 }
 
 Matrix44 BoxCollision::GetMatrixToWorld() {
-	Matrix44 local_center = Matrix44::CreateTranslationR(Vector4(*(Game_Object->position2D), 1.0f));
-	Matrix44 rot_AToWorld = Matrix44::CreateZRotationR(Game_Object->RotZ);
+	Matrix44 local_center = Matrix44::CreateTranslationR(Vector4(Game_Object->m_Position2D, 1.0f));
+	Matrix44 rot_AToWorld = Matrix44::CreateZRotationR(Game_Object->m_RotZ);
 	Matrix44 new_cons = rot_AToWorld * local_center;
 
 	return new_cons;

@@ -55,7 +55,7 @@ void PhysicsInfo::remove_force() {
 
 void PhysicsInfo::BeginUpdate(float delta_time) {
 	if (data.movable) {
-		*(game_object->position2D) += data.cur_vel * delta_time + 0.5 * data.acceleration * delta_time * delta_time;
+		game_object->m_Position2D += data.cur_vel * delta_time + 0.5 * data.acceleration * delta_time * delta_time;
 		data.cur_vel += data.acceleration * delta_time;
 	}
 }

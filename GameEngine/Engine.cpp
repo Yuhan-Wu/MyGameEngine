@@ -360,15 +360,12 @@ void Engine::CreateGameObjects(std::vector<uint8_t> PlayerData) {
 	if (!PlayerData.empty())
 	{
 		json PlayerJSON = json::parse(PlayerData);
-		std::string Name = PlayerJSON["name"];
-		size_t length = Name.length();
-		const char* NameCstr = Name.c_str();
+		std::string name = PlayerJSON["name"];
 
-		Point2D InitialPosition;
-		InitialPosition << PlayerJSON["initial_position"];
+		Point2D initialPosition;
+		initialPosition << PlayerJSON["initial_position"];
 
-		SmartPointer<GameObject> Player = GameObject::Create(NameCstr, length + 1, InitialPosition, 0);
-		// GameObject Dummy;
+		SmartPointer<GameObject> Player = GameObject::Create(name, initialPosition, 0);
 
 		if (PlayerJSON.contains("controller"))
 		{
@@ -410,13 +407,11 @@ void Engine::CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Poin
 	if (!PlayerData.empty())
 	{
 		json PlayerJSON = json::parse(PlayerData);
-		std::string Name = PlayerJSON["name"];
-		size_t length = Name.length();
-		const char* NameCstr = Name.c_str();
+		std::string name = PlayerJSON["name"];
 
-		Point2D InitialPosition = initial;
+		Point2D initialPosition = initial;
 	
-		SmartPointer<GameObject> Player = GameObject::Create(NameCstr, length + 1, InitialPosition, 0);
+		SmartPointer<GameObject> Player = GameObject::Create(name, initialPosition, 0);
 		// GameObject Dummy;
 
 		if (PlayerJSON.contains("controller"))
@@ -459,13 +454,11 @@ void Engine::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> Playe
 	if (!PlayerData.empty())
 	{
 		json PlayerJSON = json::parse(PlayerData);
-		std::string Name = PlayerJSON["name"];
-		size_t length = Name.length();
-		const char* NameCstr = Name.c_str();
+		std::string name = PlayerJSON["name"];
 
-		Point2D InitialPosition = initial;
+		Point2D initialPosition = initial;
 
-		SmartPointer<GameObject> Player = GameObject::Create(NameCstr, length + 1, InitialPosition, 0);
+		SmartPointer<GameObject> Player = GameObject::Create(name, initialPosition, 0);
 		// GameObject Dummy;
 
 		if (PlayerJSON.contains("controller"))
@@ -612,7 +605,7 @@ void CheckForNewGameObjects()
 		{
 			if (p)
 			{
-				std::cout << "Moving " << p->name << " to AllObjects.\n";
+				std::cout << "Moving " << p->m_Name << " to AllObjects.\n";
 				Engine::World_GameObject->push_back(p);
 			}
 		}
@@ -683,9 +676,9 @@ void Engine::RemoveActorIfOutOfBorder(int width, int height) {
 	float top = height + 2000.0f;
 	for (auto it = World_GameObject->begin(); it != World_GameObject->end(); )
 	{
-		Point2D* cur_position = (*it)->position2D;
+		Point2D cur_position = (*it)->m_Position2D;
 
-		if (cur_position->X() > left || cur_position->X() < -left || cur_position->Y() > top || cur_position->Y() < -top)
+		if (cur_position.X() > left || cur_position.X() < -left || cur_position.Y() > top || cur_position.Y() < -top)
 		{
 			//remove from registry
 			(*it)->ReleaseAll();

@@ -18,7 +18,7 @@ RenderInfo::~RenderInfo()
 }
 
 void RenderInfo::Render() {
-	Point2D position2D = *(wp_GameObject.Get()->position2D);
+	Point2D position2D = wp_GameObject.Get()->m_Position2D;
 	GLib::Point2D Offset = { position2D.X(), position2D.Y()};
 	GLib::Sprites::RenderSprite(*p_Sprite, Offset, 0.0f);
 }

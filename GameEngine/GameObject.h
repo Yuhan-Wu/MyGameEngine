@@ -7,6 +7,8 @@
 #include "HeapManagerProxy.h"
 #include "SmartPointer.h"
 
+#include <string>
+
 class GameObject
 {
 public:
@@ -36,17 +38,12 @@ public:
 	GameObject(const GameObject&);
 	~GameObject();
 
-	static SmartPointer<GameObject> Create(const char* Name, size_t Length, Point2D InitialPosiotion, float Rotation) {
-		Point2D* initialPosition = new Point2D(InitialPosiotion.X(), InitialPosiotion.Y());
-		GameObject* gameObject = new GameObject(Name, Length, initialPosition, Rotation);
+	static SmartPointer<GameObject> Create(std::string p_Name, Point2D p_InitialPosiotion, float p_Rotation) {
+		GameObject* gameObject = new GameObject(p_Name, p_InitialPosiotion, p_Rotation);
 		SmartPointer<GameObject> result(gameObject);
 		return result;
 	}
-
-	GameObject& operator= (const GameObject&);
-	Point2D* position2D = nullptr;
-	float RotZ;
-	char* name;
+	void ReleaseAll();
 
 	void Attach(IGameObjectController* controller);
 	void Attach(IGameObjectComponent* component);
@@ -55,15 +52,17 @@ public:
 	void Update(float delta_time);
 	void EndUpdate(float delta_time);
 
-	void ReleaseAll();
-
 	IGameObjectComponent* GetComponent(ComponentType);
 
+	GameObject& operator= (const GameObject&);
+	Point2D m_Position2D;
+	float m_RotZ;
+	std::string m_Name = "Default";
+
 protected:
-	int nameLength;
-	std::vector<IGameObjectComponent*> component_list;
-	std::vector<IGameObjectController*> controller_list;
+	std::vector<IGameObjectComponent*> m_Component_list;
+	std::vector<IGameObjectController*> m_Controller_list;
 
 private:
-	GameObject(const char* name, size_t length, Point2D* position2D, float rotation);
+	GameObject(std::string name, Point2D position2D, float rotation);
 };
