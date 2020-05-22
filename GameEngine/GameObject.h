@@ -9,28 +9,25 @@
 
 #include <string>
 
+using namespace HeapManagerProxy;
+
 class GameObject
 {
 public:
 	static void* operator new(size_t size) {
-		using namespace HeapManagerProxy;
 		return alloc(HeapManager::GetInstance(), size);
 	}
 	static void* operator new(size_t size, unsigned int align) {
-		using namespace HeapManagerProxy;
 		return alloc(HeapManager::GetInstance(), size, align);
 	}
 	static void* operator new[](size_t size) {
-		using namespace HeapManagerProxy;
 		return alloc(HeapManager::GetInstance(), size);
 	}
 
 	static void operator delete(void* pointer) {
-		using namespace HeapManagerProxy;
 		free(HeapManager::GetInstance(), pointer);
 	}
 	static void operator delete[](void* pointer) {
-		using namespace HeapManagerProxy;
 		free(HeapManager::GetInstance(), pointer);
 	}
 

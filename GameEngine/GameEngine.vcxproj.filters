@@ -114,6 +114,12 @@
     <ClInclude Include="Vector4-inln.h">
       <Filter>Header Files\GameData</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionChannel.h">
+      <Filter>Header Files\GameComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumParser.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">

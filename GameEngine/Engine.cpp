@@ -239,19 +239,19 @@ namespace Engine {
 			for (int i = 0; i < static_cast<int>(World_GameObject->size()) - 1; i++) {
 				SmartPointer<GameObject> Object_A = (*World_GameObject)[i];
 				BoxCollision* Box_A = reinterpret_cast<BoxCollision*>(Object_A->GetComponent(ComponentType::BoxCollision));
-				if (Box_A->GetChannel() == "UI") {
+				if (Box_A->GetChannel() == Channel::UI) {
 					continue;
 				}
 				for (int j = i + 1; j < static_cast<int>(World_GameObject->size()); j++) {
 					SmartPointer<GameObject> Object_B = (*World_GameObject)[j];
 					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetComponent(ComponentType::BoxCollision));
-					if (Box_B->GetChannel() == "UI") {
+					if (Box_B->GetChannel() == Channel::UI) {
 						continue;
 					}
-					if (Box_A->GetChannel() == Box_B->GetChannel() && Box_A->GetChannel() == "Static") {
+					if (Box_A->GetChannel() == Box_B->GetChannel() && Box_A->GetChannel() == Channel::Static) {
 						continue;
 					}
-					if ((Box_A->GetChannel() != "Player" && Box_B->GetChannel() == "OverlapAll") || (Box_A->GetChannel() == "OverlapAll" && Box_B->GetChannel() != "Player")) {
+					if ((Box_A->GetChannel() != Channel::Player && Box_B->GetChannel() == Channel::OverlapAll) || (Box_A->GetChannel() == Channel::OverlapAll && Box_B->GetChannel() != Channel::Player)) {
 						continue;
 					}
 					float collisiont_time = end;
@@ -264,7 +264,7 @@ namespace Engine {
 							Object1 = Object_A;
 							Object2 = Object_B;
 							collision_normal = cur_collision_normal.Normalize();
-							if (!(Box_A->GetChannel() == "Static") && !(Box_B->GetChannel() == "Static")) {
+							if (!(Box_A->GetChannel() == Channel::Static) && !(Box_B->GetChannel() == Channel::Static)) {
 								Box_A->SetCollided(true);
 								Box_B->SetCollided(true);
 							}

@@ -6,9 +6,11 @@
 #include "JobSystem/IJob.h"
 #include "Syncronization/Events.h"
 #include "json.hpp"
+
 #include <vector>
 #include <map>
 #include <string>
+
 
 namespace Engine {
 	namespace CollisionSystem {

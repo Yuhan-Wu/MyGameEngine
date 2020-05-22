@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "Matrix44.h"
+#include "CollisionChannel.h"
 
 class BoxCollision : public IGameObjectComponent
 {
@@ -25,7 +26,7 @@ public:
 	Matrix44 GetMatrixToWorld();
 	Point2D GetCenter();
 	Point2D GetExtents();
-	std::string GetChannel();
+	Channel GetChannel();
 	bool GetCollided();
 	void ReleaseExtra() override;
 
@@ -36,8 +37,8 @@ public:
 	}
 
 private:
-	SmartPointer<GameObject> Game_Object;
-	CollisionData Data;
-	std::string* Channel;
-	bool collided;
+	SmartPointer<GameObject> m_GameObject;
+	CollisionData m_Data;
+	Channel m_Channel;
+	bool m_Collided;
 };

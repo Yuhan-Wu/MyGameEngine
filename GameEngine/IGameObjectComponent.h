@@ -45,7 +45,7 @@ public:
 	virtual ComponentType Name() = 0;
 
 protected:
-	GameObject* parent;
+	GameObject* parent = nullptr;
 };
 
 #include "GameObject.h"

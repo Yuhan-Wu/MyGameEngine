@@ -174,8 +174,10 @@
     <ClInclude Include="..\nlohmann\json.hpp" />
     <ClInclude Include="AIController.h" />
     <ClInclude Include="BoxCollision.h" />
+    <ClInclude Include="CollisionChannel.h" />
     <ClInclude Include="ComponentType.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="EnumParser.h" />
     <ClInclude Include="FloatComparisonHelper.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />

@@ -1,5 +1,5 @@
 // IrisGameEngineTest.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+
 #include "Point2D.h"
 #include "GameObject.h"
 #include "Engine.h"
@@ -236,7 +236,7 @@ void CollisionTest() {
 	*/
 	// Collision
 	Engine::start();
-
+	/*
 	SmartPointer<GameObject> A = GameObject::Create("A", 2, Point2D(0, 0), 0);
 	PhysicsInfo* PhysicsA = new PhysicsInfo(A, 1, Point2D(0, 1.5), true);
 	BoxCollision* CollisionA = new BoxCollision(A, Point2D(0, 0), Point2D(1, 1),"Pawn");
@@ -256,7 +256,7 @@ void CollisionTest() {
 	for (int i = 0; i < counter; i++) {
 		Engine::tick();
 	}
-
+	*/
 	Engine::clean();
 	
 }

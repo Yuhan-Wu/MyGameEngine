@@ -95,7 +95,8 @@ HRESULT CreateDevice( HWND i_hWnd )
 
 	RECT			rc;
 
-	GetClientRect( i_hWnd, &rc );
+	// TODO: COMMENT THIS BACK!!
+	// GetClientRect( i_hWnd, &rc );
 	UINT width = rc.right - rc.left;
 	UINT height = rc.bottom - rc.top;
 
