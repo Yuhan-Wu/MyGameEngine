@@ -85,21 +85,27 @@ void FloatComparisonTest() {
 }
 
 void SmartPointerTest() {
-	Point2D* test = new Point2D(0.0f, 0.0f);
-	SmartPointer<Point2D> temp1;
+	SmartPointer<GameObject> base = GameObject::Create("Default", Point2D(0, 0), 0);
+	SmartPointer<GameObject> temp1;
 	assert(!temp1);
 	assert(temp1 == nullptr);
-	SmartPointer<Point2D> temp2(test);
+	SmartPointer<GameObject> temp2(base);
 	temp1 = temp2;
 	assert(temp1 == temp2);
 	temp2 = nullptr;
-	assert(temp1 != nullptr);
-	assert(temp1->X() == 0);
+	assert(nullptr != temp1);
+	assert(temp1->m_Position2D.X() == 0);
+	SmartPointer<GameObject> temp3 = SmartPointer<GameObject>(base);
+	assert(temp3 == temp1);
+	temp1.PrintCounter();
 	temp1 = nullptr;
+	temp3 = nullptr;
 
-	temp1.printCounter();
+	base.PrintCounter();
 
-	delete test;
+	base = nullptr;
+	base.PrintCounter();
+
 }
 
 void WeakPointerTest() {
@@ -111,11 +117,11 @@ void WeakPointerTest() {
 	temp2 = temp1;
 	SmartPointer<Point2D> temp3(temp2);
 	assert(temp1 == temp3);
-	temp1.printCounter();
+	temp1.PrintCounter();
 
 	temp2 = nullptr;
 	assert(temp1);
-	temp1.printCounter();
+	temp1.PrintCounter();
 
 	temp2 = temp1;
 	temp1 = nullptr;
@@ -206,34 +212,6 @@ void Matrix44Test() {
 
 void CollisionTest() {
 	// initialize
-	// No collision
-	/*
-	Engine::start();
-	
-	SmartPointer<GameObject> A = GameObject::Create("A", 2, Point2D(0, 0), 45);
-	PhysicsInfo* PhysicsA = new PhysicsInfo(A, 1, Point2D(1, 0));
-	BoxCollision* CollisionA = new BoxCollision(A , Point2D(1, 1), Point2D(1, 1));
-	A->Attach(PhysicsA);
-	A->Attach(CollisionA);
-	Engine::World_GameObject->push_back(A);
-
-	SmartPointer<GameObject> B = GameObject::Create("B", 2, Point2D(4, 0), -45);
-	PhysicsInfo* PhysicsB = new PhysicsInfo(B, 1, Point2D(-1, -1));
-	BoxCollision* CollisionB = new BoxCollision(B, Point2D(-1, 1), Point2D(1, 1));
-	B->Attach(PhysicsB);
-	B->Attach(CollisionB);
-	Engine::World_GameObject->push_back(B);
-
-	bool collided = false;
-	int counter = 1;
-	for (int i = 0; i < counter; i++) {
-		Engine::CollisionSystem::CheckCollision(1.0f);
-		A->BeginUpdate(1.0f);
-		B->BeginUpdate(1.0f);
-	}
-	
-	Engine::clean();
-	*/
 	// Collision
 	Engine::start();
 	/*
@@ -268,10 +246,10 @@ int main()
 	Point2D_UnitTest();
 	ConstCorrectTest();
 	FloatComparisonTest();
-	SmartPointerTest();
-	WeakPointerTest();
 	Vector4Test();
 	Matrix44Test();
-	*/
-	CollisionTest();
+	CollisionTest();*/
+
+	SmartPointerTest();
+	// WeakPointerTest();
 }

@@ -7,50 +7,50 @@ class WeakPointer
 {
 public:
 	constexpr WeakPointer() noexcept {
-		object_pointer = nullptr;
-		counter = nullptr;
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
-	constexpr WeakPointer(std::nullptr_t i_nullptr) noexcept {
-		object_pointer = nullptr;
-		counter = nullptr;
+	constexpr WeakPointer(std::nullptr_t p_NullPtr) noexcept {
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
-	WeakPointer(SmartPointer<T>& sp) : object_pointer{ sp.object_pointer }, counter{ sp.counter } {
-		counter->wp_count++;
+	WeakPointer(SmartPointer<T>& p_SP) : m_ObjectPointer{ p_SP.object_pointer }, m_Counter{ p_SP.counter } {
+		m_Counter->wp_count++;
 	}
-
-	WeakPointer(const WeakPointer<T>& other) {
-		object_pointer = other.object_pointer;
-		counter = other.counter;
+	WeakPointer(const WeakPointer<T>& p_Other) {
+		m_ObjectPointer = p_Other.m_ObjectPointer;
+		m_Counter = p_Other.m_Counter;
 	}
 	~WeakPointer() {
 		Release();
 	}
 
-	WeakPointer& operator=(WeakPointer<T>& other) {
-		if (this != &other) {
+	WeakPointer& operator=(WeakPointer<T>& p_Other) {
+		if (this != &p_Other) {
 			Release();
-			object_pointer = other.object_pointer;
-			counter = other.counter;
-			counter->wp_count++;
+			m_ObjectPointer = p_Other.m_ObjectPointer;
+			m_Counter = p_Other.m_Counter;
+			m_Counter->wp_count++;
 		}
 		return *this;
 	}
 
-	WeakPointer& operator=(SmartPointer<T>& other) {
+	WeakPointer& operator=(SmartPointer<T>& p_Other) {
 		Release();
-		object_pointer = other.object_pointer;
-		counter = other.counter;
-		counter->wp_count++;
+		m_ObjectPointer = p_Other.m_ObjectPointer;
+		m_Counter = p_Other.m_Counter;
+		m_Counter->wp_count++;
 		return *this;
 	}
 
-	void operator=(std::nullptr_t i_nullptr) {
+	void operator=(std::nullptr_t p_NullPtr) {
 		Release();
-		object_pointer = nullptr;
-		counter = nullptr;
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
+
 	SmartPointer<T> Get() {
-		if (counter->sp_count > 0) {
+		if (m_Counter->sp_count > 0) {
 			return SmartPointer<T>(*this);
 		}
 		else {
@@ -63,13 +63,14 @@ public:
 	friend class SmartPointer<T>;
 private:
 	void Release() {
-		if (counter) {
-			--counter->wp_count;
-			if (counter->sp_count < 1 && counter->wp_count < 1) {
-				counter = nullptr;
+		if (m_Counter) {
+			--m_Counter->wp_count;
+			if (m_Counter->sp_count < 1 && m_Counter->wp_count < 1) {
+				m_Counter = nullptr;
 			}
 		}
 	}
-	RefCount* counter;
-	T* object_pointer;
+
+	RefCount* m_Counter;
+	T* m_ObjectPointer;
 };
