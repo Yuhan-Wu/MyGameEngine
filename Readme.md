@@ -1,12 +1,14 @@
+# My Game Engine
+My Game Engine is a 2d game engine that enables developers to build a game using interfaces provided by the game engine.
 
-
+## V1.0 Features
 
 
 
 
 
 ## Example Game
-This is a bullethell ish game. W,A,S,D to move. The longer you hold W,A,S,D, the faster you are.
+This is a bullethell-ish game. W,A,S,D to move. The longer you hold W,A,S,D, the faster you are.
 Q to quit. Player can rebound off the wall to escape from enemies.
 
 There are four rounds and three kinds of enemies in total.
