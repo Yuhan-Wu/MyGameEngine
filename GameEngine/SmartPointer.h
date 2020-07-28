@@ -50,7 +50,7 @@ public:
 		Release();
 	}
 	
-	SmartPointer<T>& operator=(const SmartPointer<T>& p_Other) {
+	SmartPointer<T>& operator=(SmartPointer<T> p_Other) {
 		if (this != &p_Other) {
 			Release();
 			m_ObjectPointer = p_Other.m_ObjectPointer;
@@ -83,16 +83,16 @@ public:
 		return !m_ObjectPointer;
 	}
 
-	bool operator==(const SmartPointer<T>& p_Other) {
+	bool operator==(SmartPointer<T> const& p_Other) const{
 		return m_ObjectPointer == p_Other.m_ObjectPointer;
 	}
 
 
-	bool operator!=(std::nullptr_t p_NullPtr) {
+	bool operator!=(std::nullptr_t const& p_NullPtr) const{
 		return m_ObjectPointer;
 	}
 
-	bool operator!=(const SmartPointer<T>& p_Other) {
+	bool operator!=(SmartPointer<T> const& p_Other) const{
 		return m_ObjectPointer != p_Other.m_ObjectPointer;
 	}
 
@@ -144,11 +144,11 @@ private:
 };
 
 template<class T>
-inline bool operator==(std::nullptr_t i_nullptrconst, SmartPointer<T>& p_Operand1) {
+inline bool operator==(std::nullptr_t i_nullptrconst, SmartPointer<T> const& p_Operand1) {
 	return !p_Operand1;
 }
 
 template<class T>
-inline bool operator!=(std::nullptr_t i_nullptr,const SmartPointer<T>& p_Operand1) {
+inline bool operator!=(std::nullptr_t i_nullptr, SmartPointer<T> const& p_Operand1) {
 	return p_Operand1;
 }

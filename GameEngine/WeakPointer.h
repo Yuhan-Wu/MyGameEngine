@@ -21,19 +21,19 @@ public:
 		m_ObjectPointer = p_Other.m_ObjectPointer;
 		m_Counter = p_Other.m_Counter;
 	}
-	WeakPointer(WeakPointer<T>&& other) noexcept {
-		object_pointer = other.object_pointer;
-		counter = other.counter;
-		other.object_pointer = nullptr;
-		other.counter = nullptr;
+	WeakPointer(WeakPointer<T>&& p_Other) noexcept {
+		m_ObjectPointer = p_Other.m_ObjectPointer;
+		m_Counter = p_Other.m_Counter;
+		p_Other.m_ObjectPointer = nullptr;
+		p_Other.m_Counter = nullptr;
 	}
 	~WeakPointer() {
 		Release();
 	}
 
 
-	WeakPointer<T>& operator=(const WeakPointer<T>& other) {
-		if (this != &other) {
+	WeakPointer<T>& operator=(WeakPointer<T> p_Other) {
+		if (this != &p_Other) {
 			Release();
 			m_ObjectPointer = p_Other.m_ObjectPointer;
 			m_Counter = p_Other.m_Counter;
@@ -43,7 +43,7 @@ public:
 	}
 
 
-	WeakPointer<T>& operator=(const SmartPointer<T>& other) {
+	WeakPointer<T>& operator=(SmartPointer<T> p_Other) {
 
 		Release();
 		m_ObjectPointer = p_Other.m_ObjectPointer;
@@ -58,6 +58,27 @@ public:
 		m_Counter = nullptr;
 	}
 
+	operator bool() const noexcept {
+		return m_ObjectPointer != nullptr;
+	}
+
+	bool operator==(std::nullptr_t p_NullPtr) {
+		return !m_ObjectPointer;
+	}
+
+	bool operator==(WeakPointer<T> const& p_Other) const {
+		return m_ObjectPointer == p_Other.m_ObjectPointer;
+	}
+
+
+	bool operator!=(std::nullptr_t const& p_NullPtr) const {
+		return m_ObjectPointer;
+	}
+
+	bool operator!=(WeakPointer<T> const& p_Other) const {
+		return m_ObjectPointer != p_Other.m_ObjectPointer;
+	}
+
 	SmartPointer<T> Get() {
 		if (m_Counter->sp_count > 0) {
 			return SmartPointer<T>(*this);
@@ -69,13 +90,15 @@ public:
 		
 	}
 
+
+
 	friend class SmartPointer<T>;
 private:
 	void Release() {
 		if (m_Counter) {
 			--m_Counter->wp_count;
 			if (m_Counter->sp_count < 1 && m_Counter->wp_count < 1) {
-				delete counter;
+				delete m_Counter;
 				m_Counter = nullptr;
 
 			}
@@ -85,4 +108,14 @@ private:
 	RefCount* m_Counter;
 	T* m_ObjectPointer;
 };
+
+template<class T>
+inline bool operator==(std::nullptr_t i_nullptrconst, WeakPointer<T> const& p_Operand1) {
+	return !p_Operand1;
+}
+
+template<class T>
+inline bool operator!=(std::nullptr_t i_nullptr, WeakPointer<T> const& p_Operand1) {
+	return p_Operand1;
+}
 
