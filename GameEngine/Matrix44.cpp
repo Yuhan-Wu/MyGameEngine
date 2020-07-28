@@ -83,7 +83,7 @@ Matrix44& Matrix44::operator/=(float n) {
 	}
 }
 
-Matrix44& Matrix44::operator=(Matrix44& other) {
+Matrix44& Matrix44::operator=(Matrix44 other) {
 	m_Matrix[0] = other[0];
 	m_Matrix[1] = other[1];
 	m_Matrix[2] = other[2];

@@ -15,54 +15,54 @@ inline void Vector4::set_position(const Vector4& otherPoint) {
 	a = otherPoint.A();
 }
 
-inline Vector4& Vector4::operator= (const Vector4& otherPoint) {
+inline Vector4& Vector4::operator= (Vector4 otherPoint) {
 	set_position(otherPoint);
 	return *this;
 }
 
-inline Vector4* Vector4::operator+=(const Vector4 otherPoint) {
+inline Vector4& Vector4::operator+=(Vector4 otherPoint) {
 	x += otherPoint.X();
 	y += otherPoint.Y();
 	z += otherPoint.Z();
 	a += otherPoint.A();
-	return this;
+	return *this;
 }
 
-inline Vector4* Vector4::operator-=(const Vector4 otherPoint) {
+inline Vector4& Vector4::operator-=(Vector4 otherPoint) {
 	x -= otherPoint.X();
 	y -= otherPoint.Y();
 	z -= otherPoint.Z();
 	a -= otherPoint.A();
-	return this;
+	return *this;
 }
 
-inline Vector4* Vector4::operator *= (float n) {
+inline Vector4& Vector4::operator *= (float n) {
 	x *= n;
 	y *= n;
 	z *= n;
 	a *= n;
-	return this;
+	return *this;
 }
 
 
 //outside class definition
-inline Vector4 operator+(const Vector4& onePoint, const Vector4& otherPoint) {
+inline Vector4 operator+(Vector4 onePoint, Vector4 otherPoint) {
 	return Vector4(onePoint.X() + otherPoint.X(), onePoint.Y() + otherPoint.Y(), onePoint.Z() + otherPoint.Z(), onePoint.A() + otherPoint.A());
 }
 
-inline Vector4 operator-(const Vector4& onePoint, const Vector4& otherPoint) {
+inline Vector4 operator-(Vector4 onePoint, Vector4 otherPoint) {
 	return Vector4(onePoint.X() - otherPoint.X(), onePoint.Y() - otherPoint.Y(), onePoint.Z() - otherPoint.Z(), onePoint.A() - otherPoint.A());
 }
 
-inline Vector4 operator*(const Vector4& onePoint, float n) {
+inline Vector4 operator*(Vector4 onePoint, float n) {
 	return Vector4(onePoint.X() * n, onePoint.Y() * n, onePoint.Z() * n, onePoint.A() * n);
 }
 
-inline Vector4 operator*(float n, const Vector4& onePoint) {
+inline Vector4 operator*(float n, Vector4 onePoint) {
 	return Vector4(onePoint.X() * n, onePoint.Y() * n, onePoint.Z() * n, onePoint.A() * n);
 }
 
-inline float operator*(const Vector4 onePoint, const Vector4 otherPoint) {
+inline float operator*(Vector4 onePoint, Vector4 otherPoint) {
 	float result = onePoint.X() * otherPoint.X() +
 		onePoint.Y() * otherPoint.Y() +
 		onePoint.Z() * otherPoint.Z() +
@@ -70,7 +70,7 @@ inline float operator*(const Vector4 onePoint, const Vector4 otherPoint) {
 	return result;
 }
 
-inline Vector4 operator/(const Vector4& onePoint, float n) {
+inline Vector4 operator/(Vector4& onePoint, float n) {
 	try {
 		if (n == 0) {
 			throw n;
@@ -85,18 +85,18 @@ inline Vector4 operator/(const Vector4& onePoint, float n) {
 
 }
 
-inline bool operator==(const Vector4& onePoint, const Vector4& otherPoint) {
+inline bool operator==(Vector4 const& onePoint, Vector4 const& otherPoint) {
 	return (FloatEqual(onePoint.X(), otherPoint.X()) && FloatEqual(onePoint.Y(), otherPoint.Y()) && FloatEqual(onePoint.Z(), otherPoint.Z()) && FloatEqual(onePoint.A(), otherPoint.A()));
 }
 
-inline bool operator!=(const Vector4& onePoint, const Vector4& otherPoint) {
+inline bool operator!=(Vector4 const& onePoint, Vector4 const& otherPoint) {
 	return (!FloatEqual(onePoint.X(), otherPoint.X()) || !FloatEqual(onePoint.Y(), otherPoint.Y()) || !FloatEqual(onePoint.Z(), otherPoint.Z()) || !FloatEqual(onePoint.A(), otherPoint.A()));
 }
 
-inline Vector4 operator-(const Vector4& onePoint) {
+inline Vector4 operator-(Vector4 onePoint) {
 	return Vector4(-onePoint.X(), -onePoint.Y(), -onePoint.Z(), -onePoint.A());
 }
 
-inline Vector4 operator+(const Vector4& onePoint) {
+inline Vector4 operator+(Vector4 onePoint) {
 	return Vector4(onePoint.X(), onePoint.Y(), onePoint.Z(), onePoint.A());
 }

@@ -17,18 +17,18 @@ Point2D::~Point2D()
 {
 }
 
-Point2D* Point2D::operator/= (float n) {
+Point2D& Point2D::operator/= (float n) {
 	try {
 		if (n == 0) {
 			throw n;
 		}
 		x /= n;
 		y /= n;
-		return this;
+		return *this;
 	}
 	catch (int e_n) {
 		cout << "Invalid divisor " << e_n << endl;
-		return this;
+		return *this;
 	}
 
 }

@@ -20,11 +20,21 @@ public:
 	Matrix44& operator*=(float);
 	Matrix44& operator*=(Matrix44);
 	Matrix44& operator/=(float);
-	Matrix44& operator= (Matrix44& otherPoint);
+	Matrix44& operator= (Matrix44 otherPoint);
 	Vector4& operator[](int index) {
 		return m_Matrix[index];
 	}
+	bool operator==(Matrix44 const& otherPoint) const{
+		return (m_Matrix[0] == otherPoint.m_Matrix[0]) && (m_Matrix[1] == otherPoint.m_Matrix[1]) && (m_Matrix[2] == otherPoint.m_Matrix[2]) && (m_Matrix[3] == otherPoint.m_Matrix[3]);
+	}
 
+	bool operator!=(Matrix44 const& otherPoint) const{
+		return (m_Matrix[0] != otherPoint.m_Matrix[0]) || (m_Matrix[1] != otherPoint.m_Matrix[1]) || (m_Matrix[2] != otherPoint.m_Matrix[2]) || (m_Matrix[3] != otherPoint.m_Matrix[3]);
+	}
+
+	Vector4 GetRow(int index) {
+		return m_Matrix[index];
+	}
 	Vector4 GetColumn(int index) {
 		return Vector4(m_Matrix[0][index], m_Matrix[1][index], m_Matrix[2][index], m_Matrix[3][index]);
 	}

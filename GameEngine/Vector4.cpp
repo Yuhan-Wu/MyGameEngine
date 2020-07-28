@@ -48,7 +48,7 @@ Vector4::~Vector4()
 {
 }
 
-Vector4* Vector4::operator/= (float n) {
+Vector4& Vector4::operator/= (float n) {
 	try {
 		if (n == 0) {
 			throw n;
@@ -57,11 +57,11 @@ Vector4* Vector4::operator/= (float n) {
 		y /= n;
 		z /= n;
 		a /= n;
-		return this;
+		return *this;
 	}
 	catch (int e_n) {
 		std::cout << "Invalid divisor " << e_n << std::endl;
-		return this;
+		return *this;
 	}
 
 }

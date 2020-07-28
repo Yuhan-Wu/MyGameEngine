@@ -34,11 +34,11 @@ public:
 	void set_position(float, float);
 	void set_position(const Point2D&);
 
-	Point2D* operator+=(Point2D);
-	Point2D* operator-=(Point2D);
-	Point2D* operator*=(float);
-	Point2D* operator/=(float);
-	Point2D& operator= (const Point2D& otherPoint);
+	Point2D& operator+=(Point2D);
+	Point2D& operator-=(Point2D);
+	Point2D& operator*=(float);
+	Point2D& operator/=(float);
+	Point2D& operator= (Point2D otherPoint);
 	float& operator[](int index);
 	friend ostream& operator<<(ostream& output, const Point2D& point);
 

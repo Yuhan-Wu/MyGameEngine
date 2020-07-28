@@ -113,33 +113,33 @@ private:
 };
 
 template<class T>
-inline bool operator==(SmartPointer<T>& operand1, SmartPointer<T>& operand2) {
+inline bool operator==(SmartPointer<T> const& operand1, SmartPointer<T> const& operand2) {
 	if (operand1 && operand2) return *operand1 == *operand2;
 	return false;
 }
 
 template<class T>
-inline bool operator==(const SmartPointer<T>& operand1, std::nullptr_t i_nullptr) {
+inline bool operator==(SmartPointer<T> const& operand1, std::nullptr_t i_nullptr) {
 	return !operand1;
 }
 
 template<class T>
-inline bool operator==(std::nullptr_t i_nullptrconst, SmartPointer<T>& operand1) {
+inline bool operator==(std::nullptr_t i_nullptrconst, SmartPointer<T> const& operand1) {
 	return !operand1;
 }
 
 template<class T>
-inline bool operator!=(SmartPointer<T>& operand1, SmartPointer<T>& operand2) {
+inline bool operator!=(SmartPointer<T> const& operand1, SmartPointer<T> const& operand2) {
 	if (operand1 && operand2) return *operand1 != *operand2;
 	return false;
 }
 
 template<class T>
-inline bool operator!=(const SmartPointer<T>& operand1, std::nullptr_t i_nullptrconst) {
+inline bool operator!=(SmartPointer<T> const& operand1, std::nullptr_t i_nullptrconst) {
 	return operand1;
 }
 
 template<class T>
-inline bool operator!=(std::nullptr_t i_nullptr,const SmartPointer<T>& operand1) {
+inline bool operator!=(std::nullptr_t i_nullptr,SmartPointer<T> const& operand1) {
 	return operand1;
 }

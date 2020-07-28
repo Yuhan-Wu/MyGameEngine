@@ -41,11 +41,11 @@ public:
 	void set_position(float, float, float = 1, float = 0);
 	void set_position(const Vector4&);
 
-	Vector4* operator+=(Vector4);
-	Vector4* operator-=(Vector4);
-	Vector4* operator*=(float);
-	Vector4* operator/=(float);
-	Vector4& operator= (const Vector4& otherPoint);
+	Vector4& operator+=(Vector4);
+	Vector4& operator-=(Vector4);
+	Vector4& operator*=(float);
+	Vector4& operator/=(float);
+	Vector4& operator= (Vector4 otherPoint);
 	float& operator[](int index);
 	friend std::ostream& operator<<(std::ostream& output, const Vector4& point);
 
