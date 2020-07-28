@@ -5,19 +5,18 @@ struct Descriptor;
 class HeapManager
 {
 public:
-	HeapManager(void* i_pMemory, size_t i_sizeMemory, unsigned int i_numDescriptors);
-
 	static HeapManager* GetInstance();
+	static HeapManager* GetInstance(void* p_Memory, size_t p_SizeMemory, unsigned int p_NumDescriptors);
 	static void FreeInstance();
 
-	void* alloc(size_t i_size);
-	void* alloc(size_t i_size, unsigned int i_alignment);
+	void* alloc(size_t p_Size);
+	void* alloc(size_t p_Size, unsigned int p_Alignment);
 
-	bool freeMem(void* i_ptr);
+	bool freeMem(void* p_Ptr);
 	void collectMem();
 
-	bool contain(void* ptr) const;
-	bool isAllocated(void* ptr) const;
+	bool contain(void* p_Ptr) const;
+	bool isAllocated(void* p_Ptr) const;
 
 	size_t getLargestFreeBlock() const;
 	size_t getTotalFreeMemory() const;
@@ -28,19 +27,20 @@ public:
 	~HeapManager();
 
 private:
-	Descriptor* FreeMemoryList;
-	Descriptor* UsedMemoryList;
+	Descriptor* m_FreeMemoryList;
+	Descriptor* m_UsedMemoryList;
 	
-	const static unsigned int padding = 8;
-	
-	void* start;
-	size_t size;
+	void* m_Start;
+	size_t m_Size;
 
-	static HeapManager* my_manager;
+	const static unsigned int PADDING = 8;
+
+	static HeapManager* MyManager;
 
 	HeapManager();
+	HeapManager(void* p_Memory, size_t p_SizeMemory, unsigned int p_NumDescriptors);
 };
 
-inline bool HeapManager::contain(void* ptr) const {
-	return ptr >= start && reinterpret_cast<uintptr_t>(ptr) < reinterpret_cast<uintptr_t>(start) + size;
+inline bool HeapManager::contain(void* p_Ptr) const {
+	return p_Ptr >= m_Start && reinterpret_cast<uintptr_t>(p_Ptr) < reinterpret_cast<uintptr_t>(m_Start) + m_Size;
 }

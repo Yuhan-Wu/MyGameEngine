@@ -3,8 +3,8 @@
 
 namespace HeapManagerProxy {
 	HeapManager* CreateHeapManager(void* i_pMemory, size_t i_sizeMemory, unsigned int i_numDescriptors) {
-		//TODO change to singleton pattern
-		return new HeapManager(i_pMemory, i_sizeMemory, i_numDescriptors);
+		// return new HeapManager(i_pMemory, i_sizeMemory, i_numDescriptors);
+		return HeapManager::GetInstance(i_pMemory, i_sizeMemory, i_numDescriptors);
 	}
 
 	void Destroy(HeapManager* i_pManager) {
