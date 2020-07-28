@@ -16,7 +16,7 @@ public:
     {
         typename map<string,T>::const_iterator iValue = enumMap.find(value);
         if (iValue == enumMap.end())
-            throw runtime_error("");
+            throw runtime_error("No such enum value.");
         return iValue->second;
     }
 

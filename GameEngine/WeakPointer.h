@@ -7,20 +7,19 @@ class WeakPointer
 {
 public:
 	constexpr WeakPointer() noexcept {
-		object_pointer = nullptr;
-		counter = nullptr;
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
-	constexpr WeakPointer(std::nullptr_t i_nullptr) noexcept {
-		object_pointer = nullptr;
-		counter = nullptr;
+	constexpr WeakPointer(std::nullptr_t p_NullPtr) noexcept {
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
-	WeakPointer(SmartPointer<T>& sp) : object_pointer{ sp.object_pointer }, counter{ sp.counter } {
-		counter->wp_count++;
+	WeakPointer(SmartPointer<T>& p_SP) : m_ObjectPointer{ p_SP.object_pointer }, m_Counter{ p_SP.counter } {
+		m_Counter->wp_count++;
 	}
-
-	WeakPointer(const WeakPointer<T>& other) {
-		object_pointer = other.object_pointer;
-		counter = other.counter;
+	WeakPointer(const WeakPointer<T>& p_Other) {
+		m_ObjectPointer = p_Other.m_ObjectPointer;
+		m_Counter = p_Other.m_Counter;
 	}
 	WeakPointer(WeakPointer<T>&& other) noexcept {
 		object_pointer = other.object_pointer;
@@ -32,32 +31,35 @@ public:
 		Release();
 	}
 
+
 	WeakPointer<T>& operator=(const WeakPointer<T>& other) {
 		if (this != &other) {
 			Release();
-			object_pointer = other.object_pointer;
-			counter = other.counter;
-			counter->wp_count++;
+			m_ObjectPointer = p_Other.m_ObjectPointer;
+			m_Counter = p_Other.m_Counter;
+			m_Counter->wp_count++;
 		}
 		return *this;
 	}
 
+
 	WeakPointer<T>& operator=(const SmartPointer<T>& other) {
+
 		Release();
-		object_pointer = other.object_pointer;
-		counter = other.counter;
-		counter->wp_count++;
+		m_ObjectPointer = p_Other.m_ObjectPointer;
+		m_Counter = p_Other.m_Counter;
+		m_Counter->wp_count++;
 		return *this;
 	}
 
-	void operator=(std::nullptr_t i_nullptr) {
+	void operator=(std::nullptr_t p_NullPtr) {
 		Release();
-		object_pointer = nullptr;
-		counter = nullptr;
+		m_ObjectPointer = nullptr;
+		m_Counter = nullptr;
 	}
 
 	SmartPointer<T> Get() {
-		if (counter->sp_count > 0) {
+		if (m_Counter->sp_count > 0) {
 			return SmartPointer<T>(*this);
 		}
 		else {
@@ -70,47 +72,17 @@ public:
 	friend class SmartPointer<T>;
 private:
 	void Release() {
-		if (counter) {
-			--counter->wp_count;
-			if (counter->sp_count < 1 && counter->wp_count < 1) {
+		if (m_Counter) {
+			--m_Counter->wp_count;
+			if (m_Counter->sp_count < 1 && m_Counter->wp_count < 1) {
 				delete counter;
-				counter = nullptr;
+				m_Counter = nullptr;
+
 			}
 		}
 	}
 
-	RefCount* counter;
-	T* object_pointer;
+	RefCount* m_Counter;
+	T* m_ObjectPointer;
 };
 
-template<class T>
-inline bool operator==(WeakPointer<T>& operand1, WeakPointer<T>& operand2) {
-	if (operand1 && operand2) return *operand1 == *operand2;
-	return false;
-}
-
-template<class T>
-inline bool operator==(const WeakPointer<T>& operand1, std::nullptr_t i_nullptr) {
-	return !operand1;
-}
-
-template<class T>
-inline bool operator==(std::nullptr_t i_nullptrconst, WeakPointer<T>& operand1) {
-	return !operand1;
-}
-
-template<class T>
-inline bool operator!=(WeakPointer<T>& operand1, WeakPointer<T>& operand2) {
-	if (operand1 && operand2) return *operand1 != *operand2;
-	return false;
-}
-
-template<class T>
-inline bool operator!=(const WeakPointer<T>& operand1, std::nullptr_t i_nullptrconst) {
-	return operand1;
-}
-
-template<class T>
-inline bool operator!=(std::nullptr_t i_nullptr, const WeakPointer<T>& operand1) {
-	return operand1;
-}
