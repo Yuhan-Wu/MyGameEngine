@@ -36,7 +36,7 @@ public:
 			counter = nullptr;
 		}
 	}
-	SmartPointer(SmartPointer&& other) noexcept{
+	SmartPointer(SmartPointer<T>&& other) noexcept{
 		object_pointer = other.object_pointer;
 		counter = other.counter;
 		other.object_pointer = nullptr;
@@ -74,7 +74,7 @@ public:
 		return object_pointer != nullptr;
 	}
 
-	//For debug
+	// For debug only
 	void printCounter() {
 		if (counter) {
 			std::cout << "Smart Pointer:" << counter->sp_count << std::endl;
@@ -102,7 +102,7 @@ private:
 				delete object_pointer;
 			}
 			object_pointer = nullptr;
-			if (counter && counter->wp_count < 1) {
+			if (counter->wp_count < 1) {
 				delete counter;
 				counter = nullptr;
 			}

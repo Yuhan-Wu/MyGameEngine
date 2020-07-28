@@ -122,6 +122,7 @@ void WeakPointerTest() {
 	temp3 = nullptr;
 	SmartPointer<Point2D> temp4 = temp2.Get();
 	assert(!temp4);
+	temp4.printCounter();
 
 	delete test1;
 	delete test2;
@@ -268,10 +269,9 @@ int main()
 	Point2D_UnitTest();
 	ConstCorrectTest();
 	FloatComparisonTest();
-	SmartPointerTest();
+	SmartPointerTest();*/
 	WeakPointerTest();
-	Vector4Test();
+	/*Vector4Test();
 	Matrix44Test();
-	*/
-	CollisionTest();
+	CollisionTest();*/
 }
