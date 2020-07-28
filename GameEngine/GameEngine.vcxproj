@@ -180,6 +180,7 @@
     <ClInclude Include="EnumParser.h" />
     <ClInclude Include="FloatComparisonHelper.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IGameObjectComponent.h" />
     <ClInclude Include="IGameObjectController.h" />

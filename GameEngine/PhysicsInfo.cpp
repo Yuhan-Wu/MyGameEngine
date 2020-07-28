@@ -26,7 +26,6 @@ Point2D PhysicsInfo::GetCurVel() {
 	else {
 		return Point2D(0, 0);
 	}
-	
 }
 
 void PhysicsInfo::SetCurVel(Point2D NewVel) {

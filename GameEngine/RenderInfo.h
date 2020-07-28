@@ -1,6 +1,6 @@
 #pragma once
 #include "WeakPointer.h"
-#include "GameObject.h"
+#include "GameData.h"
 #include "GLib.h"
 
 class RenderInfo: public IGameObjectComponent

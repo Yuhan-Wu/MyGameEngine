@@ -1,8 +1,7 @@
 #include "pch.h"
-#include "FloatComparisonHelper.h"
 #include <math.h> 
 
-#define FLT_EPSILON 0.000001
+#define FLOAT_EPSILON 0.000001
 #define MAX_DIFF 0.000001
 
 bool FloatEqual(float first, float second) {
@@ -17,7 +16,7 @@ bool FloatEqual(float first, float second) {
     // Find the largest
     float largest = (second > first) ? second : first;
 
-    if (diff <= largest * FLT_EPSILON)
+    if (diff <= largest * FLOAT_EPSILON)
         return true;
     return false;
 }

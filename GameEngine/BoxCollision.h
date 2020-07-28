@@ -1,7 +1,6 @@
 #pragma once
 
-#include "GameObject.h"
-#include "Matrix44.h"
+#include "GameData.h"
 #include "CollisionChannel.h"
 
 class BoxCollision : public IGameObjectComponent

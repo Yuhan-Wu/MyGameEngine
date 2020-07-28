@@ -5,10 +5,9 @@
 #include "Engine.h"
 #include "Timer.h"
 #include "ProcessFile.h"
-#include "Point2D.h"
+#include "GameData.h"
 #include "PhysicsInfo.h"
 #include "BoxCollision.h"
-#include "FloatComparisonHelper.h"
 #include "HeapManagerProxy.h"
 
 #include <thread>

@@ -1,6 +1,6 @@
 #pragma once
 #include "SmartPointer.h"
-#include "GameObject.h"
+#include "GameData.h"
 
 class AIController:public IGameObjectController
 {

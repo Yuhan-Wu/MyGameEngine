@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "GameData.h"
 
 class PlayerController:public IGameObjectController
 {

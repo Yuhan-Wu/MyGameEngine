@@ -120,6 +120,9 @@
     <ClInclude Include="EnumParser.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Header Files\GameData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">

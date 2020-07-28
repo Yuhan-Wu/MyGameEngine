@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream> 
 #include "HeapManager.h"
 #include "HeapManagerProxy.h"
 #include "ComponentType.h"
@@ -31,7 +32,7 @@ public:
 		free(HeapManager::GetInstance(), pointer);
 	}
 
-		virtual void BeginUpdate(float delta_time)
+	virtual void BeginUpdate(float delta_time)
 	{}
 	virtual void Update(float delta_time)
 	{}
@@ -40,12 +41,13 @@ public:
 	virtual void ReleaseExtra()
 	{}
 	void SetParent(GameObject* parent) {
-		this->parent = parent;
+		this->m_Parent = parent;
 	}
 	virtual ComponentType Name() = 0;
 
 protected:
-	GameObject* parent = nullptr;
+	typedef void(*FunctionPointer)(float);
+	GameObject* m_Parent = nullptr;
 };
 
 #include "GameObject.h"

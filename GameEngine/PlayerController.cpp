@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PlayerController.h"
 #include "PhysicsInfo.h"
-#include "SmartPointer.h"
 
 PlayerController::PlayerController()
 {

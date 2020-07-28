@@ -9,5 +9,9 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include "json.hpp"
+#include "FloatComparisonHelper.h"
+#include "SmartPointer.h"
+#include "WeakPointer.h"
 
 #endif //PCH_H
