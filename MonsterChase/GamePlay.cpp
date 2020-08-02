@@ -118,7 +118,7 @@ void CreateTurtle(unsigned int round) {
 }
 
 void CreateGhost(unsigned int round) {
-	Point2D base_vel(0.0f, - 40.0f);
+	Point2D base_vel(0.0f, -40.0f);
 	for (unsigned int i = 0; i < 2 * round; i++) {
 		float cur_indi = (float)pow(-1, i % 2);
 		float rand_col = cur_indi * 550.f - cur_indi * 200.f * i;
@@ -129,9 +129,9 @@ void CreateGhost(unsigned int round) {
 }
 
 void CreateBomb(unsigned int round) {
-	Point2D* player_position = Gameplay::player_info->GetPlayer()->position2D;
-	float x = player_position->X();
-	float y = player_position->Y();
+	Point2D player_position = Gameplay::player_info->GetPlayer()->m_Position2D;
+	float x = player_position.X();
+	float y = player_position.Y();
 	float spawn_x = 0.0f;
 	float spawn_y = 0.0f;
 	if (abs(x - spawn_x) < 150 && abs(y - spawn_y) < 150) {
@@ -157,7 +157,7 @@ void Gameplay::Initialize() {
 		PlayerController* NewPlayerController = new PlayerController(i_GameObject);
 		i_GameObject->Attach(NewPlayerController);
 		player_info = NewPlayerController;
-	}
+		}
 	);
 
 	RegisterComponentCreator("physics_data", [](SmartPointer<GameObject>& i_GameObject, nlohmann::json& i_Initializer) {
@@ -208,16 +208,16 @@ void RegisterComponentCreator(const std::string& i_ComponentName, std::function<
 void Gameplay::CreateMonsters(unsigned int round) {
 
 	CreateTurtle(round);
-	
+
 	CreateGhost(round);
-	
+
 	CreateBomb(round);
 
 }
 
 void Gameplay::Update(int width, int height) {
-	
-	if (reinterpret_cast<BoxCollision*>(player_info->GetPlayer()->GetCollision())->GetCollided()) {
+
+	if (reinterpret_cast<BoxCollision*>(player_info->GetPlayer()->GetComponent(ComponentType::BoxCollision))->GetCollided()) {
 		game_lose = true;
 	}
 	Engine::RemoveActorIfOutOfBorder(width, height);
@@ -234,7 +234,7 @@ void Gameplay::ShowEnding() {
 	Update(800, 450);
 }
 
-void Gameplay:: TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
+void Gameplay::TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
 {
 #ifdef _DEBUG
 	const size_t	lenBuffer = 65;

@@ -8,7 +8,6 @@ BoxCollision::BoxCollision()
 	Point2D extents(0, 0);
 	CollisionData temp = CollisionData(center, extents);
 	m_Data = temp;
-	Matrix44 cons = Matrix44::I();
 	m_Collided = false;
 	m_Channel = Channel::Static;
 }
@@ -18,10 +17,6 @@ BoxCollision::BoxCollision(SmartPointer<GameObject> p_GameObject, Point2D p_Cent
 	m_Data = temp;
 	EnumParser<Channel> parser;
 	m_Channel = parser.ParseSomeEnum(channel);
-
-	Matrix44 trans_AToWorld = Matrix44::CreateTranslationR(p_GameObject->m_Position2D);
-	Matrix44 rot_AToWorld = Matrix44::CreateZRotationR(p_GameObject->m_RotZ);
-	Matrix44 cons = trans_AToWorld * rot_AToWorld;
 
 	m_GameObject = p_GameObject;
 	m_Collided = false;
