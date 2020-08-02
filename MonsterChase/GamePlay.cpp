@@ -143,7 +143,7 @@ void CreateBomb(unsigned int round) {
 }
 
 void Gameplay::Initialize() {
-	Engine::start();
+	Engine::Start();
 	RegisterControllerCreator("AI", [](SmartPointer<GameObject>& i_GameObject, nlohmann::json& i_Initializer) {
 		assert(i_Initializer["decay_rate"].is_number_float());
 
@@ -221,7 +221,7 @@ void Gameplay::Update(int width, int height) {
 		game_lose = true;
 	}
 	Engine::RemoveActorIfOutOfBorder(width, height);
-	Engine::tick();
+	Engine::Tick();
 }
 
 void Gameplay::ShowEnding() {

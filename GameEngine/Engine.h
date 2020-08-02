@@ -16,10 +16,10 @@ namespace Engine {
 	namespace CollisionSystem {
 		void CheckCollision(float);
 	}
-	void start();
-	void regist(GameObject*);
-	void tick();
-	void clean();
+	void Start();
+	void Tick();
+	void Tick(float);
+	void Clean();
 	
 	std::vector<uint8_t> LoadFile(const char* i_pScriptFilename);
 	void CreateGameObjects(std::vector<uint8_t> i_pFileContents);

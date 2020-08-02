@@ -56,7 +56,7 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 			GLib::Service(Gameplay::bQuit);
 		}
 
-		Engine::clean();
+		Engine::Clean();
 		// IMPORTANT:  Tell GLib to shutdown, releasing resources.
 		GLib::Shutdown();
 

@@ -274,7 +274,7 @@ namespace Engine {
 			}
 			if (earliest_collision < end) {
 				// Step forward
-				Timer::getInstance()->tick(earliest_collision);
+				Tick(earliest_collision);
 
 				// Response
 				// Response 1: one is movable, the other is not
@@ -292,7 +292,7 @@ namespace Engine {
 				RecursiveCheck(end - earliest_collision, end - earliest_collision + 1);
 			}
 			else {
-				Timer::getInstance()->tick(end);
+				Tick(end);
 				return;
 			}
 
@@ -306,7 +306,7 @@ void Engine::CollisionSystem::CheckCollision(float delta_time) {
 	RecursiveCheck(delta_time, delta_time + 1);
 }
 
-void Engine::start() {
+void Engine::Start() {
 	Engine::ControllerCreators = new std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >();
 	Engine::ComponentCreators = new std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >();
 	Engine::World_GameObject = new std::vector<SmartPointer<GameObject>>();
@@ -314,15 +314,37 @@ void Engine::start() {
 	JobSystem::InitJobSystem();
 }
 
-void Engine::regist(GameObject* item) {
-	Timer::getInstance()->regist(item);
+void Engine::Tick() {
+	float delta_time = Timer::getInstance()->CalcLastFrameTime_ms();
+	// float delta_time = 1;
+	Engine::CollisionSystem::CheckCollision(delta_time);
 }
 
-void Engine::tick() {
-	Timer::getInstance()->tick();
+void Engine::Tick(float p_DeltaTime) {
+	for (SmartPointer<GameObject> object : *(World_GameObject))
+	{
+		object->BeginUpdate(p_DeltaTime);
+	}
+	for (SmartPointer<GameObject> object : *(World_GameObject))
+	{
+		object->Update(p_DeltaTime);
+	}
+
+	// IMPORTANT: Tell GLib that we want to start rendering
+	GLib::BeginRendering();
+	// Tell GLib that we want to render some sprites
+	GLib::Sprites::BeginRendering();
+	for (SmartPointer<GameObject> object : *(World_GameObject))
+	{
+		object->EndUpdate(p_DeltaTime);
+	}
+	// Tell GLib we're done rendering sprites
+	GLib::Sprites::EndRendering();
+	// IMPORTANT: Tell GLib we're done rendering
+	GLib::EndRendering();
 }
 
-void Engine::clean() {
+void Engine::Clean() {
 	while (New_GameObject->size() != 0)
 	{
 		New_GameObject->back()->ReleaseAll();

@@ -97,7 +97,7 @@ void SmartPointerTest() {
 	assert(temp1->X() == 0);
 	temp1 = nullptr;
 
-	temp1.printCounter();
+	temp1.PrintCounter();
 
 	delete test;
 }
@@ -111,18 +111,18 @@ void WeakPointerTest() {
 	temp2 = temp1;
 	SmartPointer<Point2D> temp3(temp2);
 	assert(temp1 == temp3);
-	temp1.printCounter();
+	temp1.PrintCounter();
 
 	temp2 = nullptr;
 	assert(temp1);
-	temp1.printCounter();
+	temp1.PrintCounter();
 
 	temp2 = temp1;
 	temp1 = nullptr;
 	temp3 = nullptr;
 	SmartPointer<Point2D> temp4 = temp2.Get();
 	assert(!temp4);
-	temp4.printCounter();
+	temp4.PrintCounter();
 
 	delete test1;
 	delete test2;
@@ -236,7 +236,7 @@ void CollisionTest() {
 	Engine::clean();
 	*/
 	// Collision
-	Engine::start();
+	Engine::Start();
 	/*
 	SmartPointer<GameObject> A = GameObject::Create("A", 2, Point2D(0, 0), 0);
 	PhysicsInfo* PhysicsA = new PhysicsInfo(A, 1, Point2D(0, 1.5), true);
@@ -258,7 +258,7 @@ void CollisionTest() {
 		Engine::tick();
 	}
 	*/
-	Engine::clean();
+	Engine::Clean();
 	
 }
 

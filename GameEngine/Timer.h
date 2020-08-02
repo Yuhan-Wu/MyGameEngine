@@ -9,17 +9,12 @@ public:
 	static Timer* getInstance();
 	~Timer();
 
-	void tick(float);
-	void tick();
-	void regist(GameObject*);
-	void remove_from_registry(GameObject*);
 	float CalcLastFrameTime_ms();
 
 private:
-	std::vector<GameObject*> registry;
 	static Timer* timer;
 	Timer();
 
-	LARGE_INTEGER pre_tick;
-	float frequency;
+	LARGE_INTEGER m_PreTick;
+	float m_Frequency;
 };
