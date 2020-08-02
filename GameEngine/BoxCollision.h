@@ -26,11 +26,11 @@ public:
 	Point2D GetCenter();
 	Point2D GetExtents();
 	Channel GetChannel();
-	bool GetCollided();
+	void SetCollided(BoxCollision*);
+	void CleanCollided();
+	std::vector<BoxCollision*> GetCollided();
 	void ReleaseExtra() override;
-
-	void SetCollided(bool);
-
+	
 	ComponentType Name() override {
 		return ComponentType::BoxCollision;
 	}
@@ -39,5 +39,5 @@ private:
 	SmartPointer<GameObject> m_GameObject;
 	CollisionData m_Data;
 	Channel m_Channel;
-	bool m_Collided;
+	std::vector<BoxCollision*> m_CollisionList;
 };

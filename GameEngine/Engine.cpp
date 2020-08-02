@@ -244,13 +244,14 @@ namespace Engine {
 				for (int j = i + 1; j < static_cast<int>(World_GameObject->size()); j++) {
 					SmartPointer<GameObject> Object_B = (*World_GameObject)[j];
 					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetComponent(ComponentType::BoxCollision));
+					// Collision rules
 					if (Box_B->GetChannel() == Channel::UI) {
 						continue;
 					}
-					if (Box_A->GetChannel() == Box_B->GetChannel() && Box_A->GetChannel() == Channel::Static) {
+					else if (Box_B->GetChannel() == Channel::Static && Box_A->GetChannel() == Channel::Static) {
 						continue;
 					}
-					if ((Box_A->GetChannel() != Channel::Player && Box_B->GetChannel() == Channel::OverlapAll) || (Box_A->GetChannel() == Channel::OverlapAll && Box_B->GetChannel() != Channel::Player)) {
+					else if ((Box_A->GetChannel() != Channel::Player && Box_B->GetChannel() == Channel::OverlapAll) || (Box_A->GetChannel() == Channel::OverlapAll && Box_B->GetChannel() != Channel::Player)) {
 						continue;
 					}
 					float collisiont_time = end;
@@ -263,10 +264,8 @@ namespace Engine {
 							Object1 = Object_A;
 							Object2 = Object_B;
 							collision_normal = cur_collision_normal.Normalize();
-							if (!(Box_A->GetChannel() == Channel::Static) && !(Box_B->GetChannel() == Channel::Static)) {
-								Box_A->SetCollided(true);
-								Box_B->SetCollided(true);
-							}
+							Box_A->SetCollided(Box_B);
+							Box_B->SetCollided(Box_A);
 							std::cout << "Collided" << std::endl;
 						}
 					}
@@ -295,7 +294,6 @@ namespace Engine {
 				Tick(end);
 				return;
 			}
-
 		}
 
 	}
@@ -303,6 +301,11 @@ namespace Engine {
 
 void Engine::CollisionSystem::CheckCollision(float delta_time) {
 	// Only box collision right now
+	for (int i = 0; i < static_cast<int>(World_GameObject->size()) - 1; i++) {
+		SmartPointer<GameObject> Object = (*World_GameObject)[i];
+		BoxCollision* Box = reinterpret_cast<BoxCollision*>(Object->GetComponent(ComponentType::BoxCollision));
+		Box->CleanCollided();
+	}
 	RecursiveCheck(delta_time, delta_time + 1);
 }
 

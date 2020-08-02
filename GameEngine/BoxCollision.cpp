@@ -8,7 +8,6 @@ BoxCollision::BoxCollision()
 	Point2D extents(0, 0);
 	CollisionData temp = CollisionData(center, extents);
 	m_Data = temp;
-	m_Collided = false;
 	m_Channel = Channel::Static;
 }
 
@@ -19,12 +18,12 @@ BoxCollision::BoxCollision(SmartPointer<GameObject> p_GameObject, Point2D p_Cent
 	m_Channel = parser.ParseSomeEnum(channel);
 
 	m_GameObject = p_GameObject;
-	m_Collided = false;
 }
 
 BoxCollision :: ~BoxCollision()
 {
 	m_GameObject = nullptr;
+	m_CollisionList.clear();
 }
 
 Matrix44 BoxCollision::GetMatrixToWorld() {
@@ -47,14 +46,19 @@ Channel BoxCollision::GetChannel() {
 	return m_Channel;
 }
 
-bool BoxCollision::GetCollided() {
-	return m_Collided;
+std::vector<BoxCollision*> BoxCollision::GetCollided() {
+	return m_CollisionList;
 }
 
 void BoxCollision::ReleaseExtra() {
 	m_GameObject = nullptr;
+	m_CollisionList.clear();
 }
 
-void BoxCollision::SetCollided(bool new_state) {
-	m_Collided = new_state;
+void BoxCollision::SetCollided(BoxCollision* p_OtherBox) {
+	m_CollisionList.push_back(p_OtherBox);
+}
+
+void BoxCollision::CleanCollided() {
+	m_CollisionList.clear();
 }

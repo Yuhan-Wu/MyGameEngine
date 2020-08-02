@@ -217,8 +217,11 @@ void Gameplay::CreateMonsters(unsigned int round) {
 
 void Gameplay::Update(int width, int height) {
 
-	if (reinterpret_cast<BoxCollision*>(player_info->GetPlayer()->GetComponent(ComponentType::BoxCollision))->GetCollided()) {
-		game_lose = true;
+	for (BoxCollision* game_object : reinterpret_cast<BoxCollision*>(player_info->GetPlayer()->GetComponent(ComponentType::BoxCollision))->GetCollided()) {
+		if (game_object->GetChannel() == Channel::Pawn) {
+			game_lose = true;
+			break;
+		}
 	}
 	Engine::RemoveActorIfOutOfBorder(width, height);
 	Engine::Tick();
