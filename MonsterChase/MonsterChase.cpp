@@ -31,18 +31,18 @@ int WINAPI wWinMain(_In_ HINSTANCE i_hInstance, _In_opt_ HINSTANCE i_hPrevInstan
 		do
 		{
 			// IMPORTANT: We need to let GLib do it's thing. 
-			GLib::Service(Gameplay:: quit);
+			GLib::Service(Gameplay:: Quit);
 			delay++;
 			if (delay == max_delay) {
 				round++;
 				delay = 0;
 			}
-			if (Gameplay::Customize::game_lose || round > 4) {
+			if (Gameplay::Customize::GameLose || round > 4) {
 				// lose or win
 				Gameplay::Customize::ShowEnding();
 				break;
 			}
-			if (!Gameplay::quit)
+			if (!Gameplay::Quit)
 			{
 				if (delay == 0) {
 					Gameplay::Customize:: CreateMonsters(round);
@@ -50,10 +50,10 @@ int WINAPI wWinMain(_In_ HINSTANCE i_hInstance, _In_opt_ HINSTANCE i_hPrevInstan
 
 				Gameplay::Update(800, 450);
 			}
-		} while (Gameplay::quit == false);
+		} while (Gameplay::Quit == false);
 		
-		while (!Gameplay::quit) {
-			GLib::Service(Gameplay::quit);
+		while (!Gameplay::Quit) {
+			GLib::Service(Gameplay::Quit);
 		}
 
 		Engine::Clean();

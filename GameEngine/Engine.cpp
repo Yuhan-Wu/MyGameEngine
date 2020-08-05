@@ -379,7 +379,7 @@ void Engine::Clean() {
 
 void operator<<(Point2D& vec, nlohmann::json& json_obj);
 void AddNewGameObject(SmartPointer<GameObject> i_pNewGameObject);
-void Engine::CreateGameObjects(std::vector<uint8_t> PlayerData) {
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> PlayerData) {
 	using json = nlohmann::json;
 	if (!PlayerData.empty())
 	{
@@ -426,7 +426,7 @@ void Engine::CreateGameObjects(std::vector<uint8_t> PlayerData) {
 	}
 }
 
-void Engine::CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Point2D initial) {
+void Engine::FileProcess::CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Point2D initial) {
 	using json = nlohmann::json;
 	if (!PlayerData.empty())
 	{
@@ -473,7 +473,7 @@ void Engine::CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Poin
 	}
 }
 
-void Engine::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, Point2D initial, Point2D vel) {
+void Engine::FileProcess::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, Point2D initial, Point2D vel) {
 	using json = nlohmann::json;
 	if (!PlayerData.empty())
 	{
@@ -521,7 +521,7 @@ void Engine::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> Playe
 	}
 }
 
-std::vector<uint8_t> Engine::LoadFile(const char* i_pScriptFilename) {
+std::vector<uint8_t> Engine::FileProcess::LoadFile(const char* i_pScriptFilename) {
 	assert(i_pScriptFilename != nullptr);
 
 	std::vector<uint8_t> Buffer;
@@ -553,7 +553,7 @@ std::vector<uint8_t> Engine::LoadFile(const char* i_pScriptFilename) {
 	return Buffer;
 }
 
-void Engine::ProcessFileContents(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent) {
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent) {
 	if (!PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
@@ -569,7 +569,7 @@ void Engine::ProcessFileContents(std::vector<uint8_t> PlayerData, std::function<
 
 }
 
-void Engine::ProcessFileContentsWithPosition(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Point2D initial, Engine::Event* i_pFinishEvent) {
+void Engine::FileProcess::ProcessFileContentsWithPosition(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Point2D initial, Engine::Event* i_pFinishEvent) {
 	if (!PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
@@ -585,7 +585,7 @@ void Engine::ProcessFileContentsWithPosition(std::vector<uint8_t> PlayerData, st
 
 }
 
-void Engine::ProcessFileContentsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Point2D initial,Point2D vel, Engine::Event* i_pFinishEvent) {
+void Engine::FileProcess::ProcessFileContentsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Point2D initial,Point2D vel, Engine::Event* i_pFinishEvent) {
 	if (!PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
@@ -638,7 +638,7 @@ void CheckForNewGameObjects()
 	}
 }
 
-void Engine::CreateActor(const char* i_pScriptFilename) {
+void Engine::FileProcess::CreateActor(const char* i_pScriptFilename) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
@@ -657,7 +657,7 @@ void Engine::CreateActor(const char* i_pScriptFilename) {
 	Engine::JobSystem::RequestShutdown();
 }
 
-void Engine::CreateActorWithPosition(const char* i_pScriptFilename, Point2D initial) {
+void Engine::FileProcess::CreateActorWithPosition(const char* i_pScriptFilename, Point2D initial) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
@@ -676,7 +676,7 @@ void Engine::CreateActorWithPosition(const char* i_pScriptFilename, Point2D init
 	Engine::JobSystem::RequestShutdown();
 }
 
-void Engine::CreateActorWithPositionAndVelocity(const char* i_pScriptFilename, Point2D initial, Point2D vel) {
+void Engine::FileProcess::CreateActorWithPositionAndVelocity(const char* i_pScriptFilename, Point2D initial, Point2D vel) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
@@ -695,7 +695,7 @@ void Engine::CreateActorWithPositionAndVelocity(const char* i_pScriptFilename, P
 	Engine::JobSystem::RequestShutdown();
 }
 
-void Engine::RemoveActorIfOutOfBorder(int width, int height) {
+void Engine::Game::RemoveActorIfOutOfBorder(int width, int height) {
 	float left = width + 2000.0f;
 	float top = height + 2000.0f;
 	for (auto it = World_GameObject->begin(); it != World_GameObject->end(); )

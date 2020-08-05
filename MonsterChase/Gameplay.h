@@ -5,8 +5,8 @@
 
 namespace Gameplay {
 
-	extern bool quit;
-	extern PlayerController* player_info;
+	extern bool Quit;
+	extern PlayerController* PlayerInfo;
 
 	void Initialize();
 
@@ -15,7 +15,7 @@ namespace Gameplay {
 	void TestKeyCallback(unsigned int i_VKeyID, bool p_WentDown);
 
 	namespace Customize {
-		extern bool game_lose;
+		extern bool GameLose;
 
 		void User_Initialize();
 		void User_Update(int width, int height);
