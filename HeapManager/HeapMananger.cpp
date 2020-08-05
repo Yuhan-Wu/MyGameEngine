@@ -194,7 +194,7 @@ void* HeapManager::alloc(size_t i_size, unsigned int i_alignment) {
 }
 
 bool HeapManager::freeMem(void* i_ptr) {
-	//TODO pointer check
+	// TODO pointer check
 	Descriptor* cur_des = reinterpret_cast<Descriptor*>(reinterpret_cast<uintptr_t>(i_ptr) - PADDING / 2 - sizeof(Descriptor));
 	Descriptor* previous = cur_des->previous;
 	Descriptor* next = cur_des->next;

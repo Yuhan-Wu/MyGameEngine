@@ -48,6 +48,7 @@ public:
 	void BeginUpdate(float delta_time);
 	void Update(float delta_time);
 	void EndUpdate(float delta_time);
+	void Render();
 
 	IGameObjectComponent* GetComponent(ComponentType);
 

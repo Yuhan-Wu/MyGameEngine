@@ -61,6 +61,13 @@ void GameObject::ReleaseAll() {
 		controller->ReleaseExtra();
 		delete controller;
 	}
+
+	while (m_Component_list.size() != 0) {
+		IGameObjectComponent* component = m_Component_list.back();
+		m_Component_list.pop_back();
+		component->ReleaseExtra();
+		delete component;
+	}
 }
 
 void GameObject::BeginUpdate(float delta_time)
@@ -70,6 +77,13 @@ void GameObject::BeginUpdate(float delta_time)
 	{
 		assert(m_Controller_list[i]);
 		m_Controller_list[i]->BeginUpdate(delta_time);
+	}
+
+	count = m_Component_list.size();
+	for (size_t i = 0; i < count; i++)
+	{
+		assert(m_Component_list[i]);
+		m_Component_list[i]->BeginUpdate(delta_time);
 	}
 }
 
@@ -81,6 +95,13 @@ void GameObject::Update(float delta_time)
 		assert(m_Controller_list[i]);
 		m_Controller_list[i]->Update(delta_time);
 	}
+
+	count = m_Component_list.size();
+	for (size_t i = 0; i < count; i++)
+	{
+		assert(m_Component_list[i]);
+		m_Component_list[i]->Update(delta_time);
+	}
 }
 void GameObject::EndUpdate(float delta_time)
 {
@@ -89,6 +110,21 @@ void GameObject::EndUpdate(float delta_time)
 	{
 		assert(m_Controller_list[i]);
 		m_Controller_list[i]->EndUpdate(delta_time);
+	}
+
+	count = m_Component_list.size();
+	for (size_t i = 0; i < count; i++)
+	{
+		assert(m_Component_list[i]);
+		m_Component_list[i]->EndUpdate(delta_time);
+	}
+}
+void GameObject::Render() {
+	size_t count = m_Component_list.size();
+	for (size_t i = 0; i < count; i++)
+	{
+		assert(m_Component_list[i]);
+		m_Component_list[i]->Render();
 	}
 }
 

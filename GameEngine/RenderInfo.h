@@ -20,13 +20,13 @@ public:
 	RenderInfo(SmartPointer<GameObject>, GLib::Sprites::Sprite*);
 	~RenderInfo();
 
-	void EndUpdate(float) override;
+	void Render() override;
 	void ReleaseExtra() override;
 	ComponentType Name() override{
 		return ComponentType::RenderInfo;
 	}
 private:
-	void Render();
+	
 
 	WeakPointer<GameObject> wp_GameObject;
 	GLib::Sprites::Sprite* p_Sprite;

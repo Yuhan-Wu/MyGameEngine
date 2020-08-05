@@ -38,6 +38,9 @@ public:
 	{}
 	virtual void EndUpdate(float delta_time)
 	{}
+	virtual void Render()
+	{}
+
 	virtual void ReleaseExtra()
 	{}
 	void SetParent(GameObject* parent) {

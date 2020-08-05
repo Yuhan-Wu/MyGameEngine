@@ -32,57 +32,62 @@ namespace Engine {
 			return op1 > op2 ? op1 : op2;
 		}
 
-		bool CheckCollisionAlongAxis(Vector4 BBCenterInWorldA, Vector4 XWorldA, Vector4 YWorldA,
-			Vector4 BBCenterInWorldB, Vector4 XWorldB, Vector4 YWorldB,
-			Vector4 Axis, Vector4 VelARelB, float FrameLength,
+		bool CheckCollisionAlongAxis(Vector4 p_BBCenterInWorldA, Vector4 p_XWorldA, Vector4 p_YWorldA,
+			Vector4 p_BBCenterInWorldB, Vector4 p_XWorldB, Vector4 p_YWorldB,
+			Vector4 p_Axis, Vector4 p_VelARelB, float p_FrameLength,
 			float& o_TClose, float& o_TOpen) {
-			float CenterOnAxisA = BBCenterInWorldA * Axis;
-			float CenterOnAxisB = BBCenterInWorldB * Axis;
-			float ProjectedExtentsA = fabs(Axis * XWorldA) + fabs(Axis * YWorldA);
-			float ProjectedExtentsB = fabs(Axis * XWorldB) + fabs(Axis * YWorldB) + ProjectedExtentsA;
-			float ProjectedVelARelB = VelARelB * Axis;
+			float CenterOnAxisA = p_BBCenterInWorldA * p_Axis;
+			float CenterOnAxisB = p_BBCenterInWorldB * p_Axis;
+			float ProjectedExtentsA = fabs(p_Axis * p_XWorldA) + fabs(p_Axis * p_YWorldA);
+			float ProjectedExtentsB = fabs(p_Axis * p_XWorldB) + fabs(p_Axis * p_YWorldB) + ProjectedExtentsA;
+			float ProjectedVelARelB = p_VelARelB * p_Axis;
 			// Calculation
 			float LeftB = CenterOnAxisB - ProjectedExtentsB;
 			float RightB = CenterOnAxisB + ProjectedExtentsB;
 			float DClose = LeftB - CenterOnAxisA;
 			float DOpen = RightB - CenterOnAxisA;
 			o_TOpen = 0.0f;
-			o_TClose = FrameLength;
+			o_TClose = p_FrameLength;
 			
+			// Already collided
 			if (CenterOnAxisA > LeftB && CenterOnAxisA < RightB) {
 				o_TClose = -0.1f;
-				o_TOpen = FrameLength;
+				o_TOpen = p_FrameLength;
 				return true;
 			}
 
+			// On the edge
 			if (FloatEqual(CenterOnAxisA, LeftB) || FloatEqual (CenterOnAxisA, RightB)) {
 				o_TClose = 0.0f;
-				o_TOpen = FrameLength;
+				o_TOpen = p_FrameLength;
 				return true;
 			}
 
 			// Special cases
+			// Not relatively static
 			if (!FloatEqual(ProjectedVelARelB, 0.0f)) {
 				o_TClose = DClose / ProjectedVelARelB;
 				o_TOpen = DOpen / ProjectedVelARelB;
+				// Moving in the opposite direction from B
 				if (o_TOpen < 0) {
-					o_TClose = FrameLength;
+					o_TClose = p_FrameLength;
 					o_TOpen = 0.0f;
 					return false;
 				}
+				// A is on the other side of B
 				if (o_TOpen < o_TClose)
 				{
 					float temp = o_TOpen;
 					o_TOpen = o_TClose;
 					o_TClose = temp;
 				}
-				o_TClose = o_TClose > FrameLength ? FrameLength : o_TClose;
+				o_TClose = o_TClose > p_FrameLength ? p_FrameLength : o_TClose;
 			}
 			else {
-				o_TClose = FrameLength;
+				o_TClose = p_FrameLength;
 				o_TOpen = 0.0f;
 			}
-			return (o_TClose > 0.0f || FloatEqual(o_TClose, 0.0f)) && o_TClose < FrameLength;
+			return (o_TClose > 0.0f || FloatEqual(o_TClose, 0.0f)) && o_TClose < p_FrameLength;
 		}
 
 		bool CheckCollisionAgainstOther(BoxCollision* Box_A, BoxCollision* Box_B,
@@ -235,16 +240,16 @@ namespace Engine {
 			SmartPointer<GameObject> Object2;
 			Vector4 collision_normal;
 			float earliest_collision = earliest;
-			for (int i = 0; i < static_cast<int>(World_GameObject->size()) - 1; i++) {
+			for (auto i = 0; i < World_GameObject->size() - 1; i++) {
 				SmartPointer<GameObject> Object_A = (*World_GameObject)[i];
 				BoxCollision* Box_A = reinterpret_cast<BoxCollision*>(Object_A->GetComponent(ComponentType::BoxCollision));
 				if (Box_A->GetChannel() == Channel::UI) {
 					continue;
 				}
-				for (int j = i + 1; j < static_cast<int>(World_GameObject->size()); j++) {
+				for (auto j = i + 1; j < World_GameObject->size(); j++) {
 					SmartPointer<GameObject> Object_B = (*World_GameObject)[j];
 					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetComponent(ComponentType::BoxCollision));
-					// Collision rules
+					//TODO: Use mask for collision rules
 					if (Box_B->GetChannel() == Channel::UI) {
 						continue;
 					}
@@ -254,13 +259,13 @@ namespace Engine {
 					else if ((Box_A->GetChannel() != Channel::Player && Box_B->GetChannel() == Channel::OverlapAll) || (Box_A->GetChannel() == Channel::OverlapAll && Box_B->GetChannel() != Channel::Player)) {
 						continue;
 					}
-					float collisiont_time = end;
+					float collision_time = end;
 					Vector4 cur_collision_normal;
-					bool result_A_and_B = CheckCollisionAgainstOther(Box_A, Box_B, Object_A, Object_B, end, collisiont_time, cur_collision_normal);
+					bool result_A_and_B = CheckCollisionAgainstOther(Box_A, Box_B, Object_A, Object_B, end, collision_time, cur_collision_normal);
 					// Collided
 					if (result_A_and_B) {
-						if (collisiont_time < earliest_collision) {
-							earliest_collision = collisiont_time < 0 ? (end - 0.1f) : collisiont_time;
+						if (collision_time < earliest_collision) {
+							earliest_collision = collision_time < 0 ? (end - 0.1f) : collision_time;
 							Object1 = Object_A;
 							Object2 = Object_B;
 							collision_normal = cur_collision_normal.Normalize();
@@ -299,14 +304,14 @@ namespace Engine {
 	}
 }
 
-void Engine::CollisionSystem::CheckCollision(float delta_time) {
+void Engine::CollisionSystem::CheckCollision(float p_DeltaTime) {
 	// Only box collision right now
 	for (int i = 0; i < static_cast<int>(World_GameObject->size()) - 1; i++) {
 		SmartPointer<GameObject> Object = (*World_GameObject)[i];
 		BoxCollision* Box = reinterpret_cast<BoxCollision*>(Object->GetComponent(ComponentType::BoxCollision));
 		Box->CleanCollided();
 	}
-	RecursiveCheck(delta_time, delta_time + 1);
+	RecursiveCheck(p_DeltaTime, p_DeltaTime + 1);
 }
 
 void Engine::Start() {
@@ -332,6 +337,10 @@ void Engine::Tick(float p_DeltaTime) {
 	{
 		object->Update(p_DeltaTime);
 	}
+	for (SmartPointer<GameObject> object : *(World_GameObject))
+	{
+		object->EndUpdate(p_DeltaTime);
+	}
 
 	// IMPORTANT: Tell GLib that we want to start rendering
 	GLib::BeginRendering();
@@ -339,7 +348,7 @@ void Engine::Tick(float p_DeltaTime) {
 	GLib::Sprites::BeginRendering();
 	for (SmartPointer<GameObject> object : *(World_GameObject))
 	{
-		object->EndUpdate(p_DeltaTime);
+		object->Render();
 	}
 	// Tell GLib we're done rendering sprites
 	GLib::Sprites::EndRendering();

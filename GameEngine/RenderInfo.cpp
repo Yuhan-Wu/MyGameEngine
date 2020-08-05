@@ -23,10 +23,6 @@ void RenderInfo::Render() {
 	GLib::Sprites::RenderSprite(*p_Sprite, Offset, 0.0f);
 }
 
-void RenderInfo::EndUpdate(float delta_time) {
-	Render();
-}
-
 void RenderInfo::ReleaseExtra() {
 	if (p_Sprite) GLib::Sprites::Release(p_Sprite);
 	wp_GameObject = nullptr;
