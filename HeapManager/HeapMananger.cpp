@@ -3,6 +3,7 @@
 //debug
 #include <assert.h>
 #include <iostream>
+#include <stdexcept>
 
 HeapManager* HeapManager::MyManager = nullptr;
 
@@ -194,8 +195,19 @@ void* HeapManager::alloc(size_t i_size, unsigned int i_alignment) {
 }
 
 bool HeapManager::freeMem(void* i_ptr) {
-	// TODO pointer check
+	Descriptor* temp = m_UsedMemoryList;
+	bool found = false;
 	Descriptor* cur_des = reinterpret_cast<Descriptor*>(reinterpret_cast<uintptr_t>(i_ptr) - PADDING / 2 - sizeof(Descriptor));
+	while (temp) {
+		if (temp == cur_des) {
+			found = true;
+			break;
+		}
+		temp = temp->next;
+	}
+	if (!found) {
+		throw std::runtime_error("ERROR: Pointer not found!");
+	}
 	Descriptor* previous = cur_des->previous;
 	Descriptor* next = cur_des->next;
 	if (previous) {

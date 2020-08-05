@@ -33,7 +33,7 @@ ProcessFile::~ProcessFile() {
 void ProcessFile::operator()() {
 	if (m_pFilename)
 	{
-		std::vector<uint8_t> pFileContents = Engine::LoadFile(m_pFilename);
+		std::vector<uint8_t> pFileContents = Engine::FileProcess::LoadFile(m_pFilename);
 
 		if (!pFileContents.empty())
 		{
@@ -56,7 +56,7 @@ void ProcessFile::operator()() {
 					Engine::JobSystem::RunJob("ProcessFileContents",
 						[pFileContents, Processor, pFinishEvent]()
 						{
-							Engine::ProcessFileContents(pFileContents, Processor, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, pFinishEvent);
 						},
 						"Default"
 							);
@@ -72,7 +72,7 @@ void ProcessFile::operator()() {
 					Engine::JobSystem::RunJob("ProcessFileContents",
 						[pFileContents, Processor, ini_loc, pFinishEvent]()
 						{
-							Engine::ProcessFileContentsWithPosition(pFileContents, Processor, ini_loc, pFinishEvent);
+							Engine::FileProcess::ProcessFileContentsWithPosition(pFileContents, Processor, ini_loc, pFinishEvent);
 						},
 						"Default"
 							);
@@ -89,7 +89,7 @@ void ProcessFile::operator()() {
 					Engine::JobSystem::RunJob("ProcessFileContents",
 						[pFileContents, Processor, ini_loc, ini_vel, pFinishEvent]()
 						{
-							Engine::ProcessFileContentsWithPositionAndVelocity(pFileContents, Processor, ini_loc, ini_vel, pFinishEvent);
+							Engine::FileProcess::ProcessFileContentsWithPositionAndVelocity(pFileContents, Processor, ini_loc, ini_vel, pFinishEvent);
 						},
 						"Default"
 							);
