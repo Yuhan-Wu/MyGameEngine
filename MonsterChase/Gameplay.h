@@ -5,18 +5,22 @@
 
 namespace Gameplay {
 
-	extern bool bQuit;
-	extern bool game_lose;
+	extern bool quit;
 	extern PlayerController* player_info;
-
-	void CreateMonsters(unsigned int round);
 
 	void Initialize();
 
-	void Update(int width, int height);
+	void Update(int p_Width, int p_Height);
 
-	void ShowEnding();
+	void TestKeyCallback(unsigned int i_VKeyID, bool p_WentDown);
 
-	void TestKeyCallback(unsigned int i_VKeyID, bool bWentDown);
+	namespace Customize {
+		extern bool game_lose;
 
+		void User_Initialize();
+		void User_Update(int width, int height);
+
+		void CreateMonsters(unsigned int round);
+		void ShowEnding();
+	}
 }

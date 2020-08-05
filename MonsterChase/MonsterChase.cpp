@@ -7,7 +7,7 @@
 #include "Gameplay.h"
 #include "GLib.h"
 
-int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_lpCmdLine, int i_nCmdShow)
+int WINAPI wWinMain(_In_ HINSTANCE i_hInstance, _In_opt_ HINSTANCE i_hPrevInstance, _In_ LPWSTR i_lpCmdLine, _In_ int i_nCmdShow)
 {
 	// _CrtSetBreakAlloc(207);
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
@@ -31,29 +31,29 @@ int WINAPI wWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance, LPWSTR i_l
 		do
 		{
 			// IMPORTANT: We need to let GLib do it's thing. 
-			GLib::Service(Gameplay:: bQuit);
+			GLib::Service(Gameplay:: quit);
 			delay++;
 			if (delay == max_delay) {
 				round++;
 				delay = 0;
 			}
-			if (Gameplay::game_lose || round > 4) {
+			if (Gameplay::Customize::game_lose || round > 4) {
 				// lose or win
-				Gameplay::ShowEnding();
+				Gameplay::Customize::ShowEnding();
 				break;
 			}
-			if (!Gameplay::bQuit)
+			if (!Gameplay::quit)
 			{
 				if (delay == 0) {
-					Gameplay::CreateMonsters(round);
+					Gameplay::Customize:: CreateMonsters(round);
 				}
 
 				Gameplay::Update(800, 450);
 			}
-		} while (Gameplay::bQuit == false);
+		} while (Gameplay::quit == false);
 		
-		while (!Gameplay::bQuit) {
-			GLib::Service(Gameplay::bQuit);
+		while (!Gameplay::quit) {
+			GLib::Service(Gameplay::quit);
 		}
 
 		Engine::Clean();

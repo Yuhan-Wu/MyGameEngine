@@ -8,13 +8,13 @@
 #include "BoxCollision.h"
 
 
-void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
+void* LoadFile(const char* p_Filename, size_t& o_SizeFile)
 {
-	assert(i_pFilename != NULL);
+	assert(p_Filename != NULL);
 
 	FILE* pFile = NULL;
 
-	errno_t fopenError = fopen_s(&pFile, i_pFilename, "rb");
+	errno_t fopenError = fopen_s(&pFile, p_Filename, "rb");
 	if (fopenError != 0)
 		return NULL;
 
@@ -37,19 +37,19 @@ void* LoadFile(const char* i_pFilename, size_t& o_sizeFile)
 
 	fclose(pFile);
 
-	o_sizeFile = FileSize;
+	o_SizeFile = FileSize;
 
 	return pBuffer;
 }
 
-GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename, float& half_width, float& half_height)
+GLib::Sprites::Sprite* CreateSprite(const char* p_Filename, float& p_HalfWidth, float& p_HalfHeight)
 {
-	assert(i_pFilename);
+	assert(p_Filename);
 
 	size_t sizeTextureFile = 0;
 
 	// Load the source file (texture data)
-	void* pTextureFile = LoadFile(i_pFilename, sizeTextureFile);
+	void* pTextureFile = LoadFile(p_Filename, sizeTextureFile);
 
 	// Ask GLib to create a texture out of the data (assuming it was loaded successfully)
 	GLib::Texture* pTexture = pTextureFile ? GLib::CreateTexture(pTextureFile, sizeTextureFile) : nullptr;
@@ -70,8 +70,8 @@ GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename, float& half_width, 
 	bool result = GLib::GetDimensions(pTexture, width, height, depth);
 	assert(result == true);
 	assert((width > 0) && (height > 0));
-	half_width = width / 2.0f;
-	half_height = height / 2.0f;
+	p_HalfWidth = width / 2.0f;
+	p_HalfHeight = height / 2.0f;
 
 	// Define the sprite edges
 	GLib::Sprites::SpriteEdges	Edges = { -float(width / 2.0f), float(height), float(width / 2.0f), 0.0f };
@@ -92,58 +92,71 @@ GLib::Sprites::Sprite* CreateSprite(const char* i_pFilename, float& half_width, 
 	return pSprite;
 }
 
-void RegisterControllerCreator(const std::string& i_ControllerName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> i_ControllerCreator);
-void RegisterComponentCreator(const std::string& i_ControllerName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> i_ComponentCreator);
+void RegisterControllerCreator(const std::string& p_ControllerName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> p_ControllerCreator)
+{
+	Engine::ControllerCreators->insert({ p_ControllerName, p_ControllerCreator });
+}
+
+void RegisterComponentCreator(const std::string& p_ComponentName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> p_ComponentCreator)
+{
+	Engine::ComponentCreators->insert({ p_ComponentName, p_ComponentCreator });
+}
 
 namespace Gameplay {
 
-
-	bool bQuit = false;
-	bool game_lose = false;
-
-	// Level data
-	int max_turtle = 6;
-	int max_ghost = 4;
-	int max_bomb = 6;
+	bool quit = false;
 
 	PlayerController* player_info = nullptr;
-}
 
-void CreateTurtle(unsigned int round) {
-	for (unsigned int i = 0; i < round + 1; i++) {
-		float rand_row = -250.0f + 170.f * (i - 1.f);
-		float rand_col = (i % 2) * 350.f - 1000.f;
-		Engine::CreateActorWithPosition("..\\GameEngine\\Turtle.json", Point2D(rand_col, rand_row));
+	namespace Customize {
+		bool game_lose = false;
+
+		// Level data
+		int max_turtle = 6;
+		int max_ghost = 4;
+		int max_bomb = 6;
 	}
-}
-
-void CreateGhost(unsigned int round) {
-	Point2D base_vel(0.0f, -40.0f);
-	for (unsigned int i = 0; i < 2 * round; i++) {
-		float cur_indi = (float)pow(-1, i % 2);
-		float rand_col = cur_indi * 550.f - cur_indi * 200.f * i;
-		float rand_row = cur_indi * 800.f;
-
-		Engine::CreateActorWithPositionAndVelocity("..\\GameEngine\\Ghost.json", Point2D(rand_col, rand_row), cur_indi * base_vel);
-	}
-}
-
-void CreateBomb(unsigned int round) {
-	Point2D player_position = Gameplay::player_info->GetPlayer()->m_Position2D;
-	float x = player_position.X();
-	float y = player_position.Y();
-	float spawn_x = 0.0f;
-	float spawn_y = 0.0f;
-	if (abs(x - spawn_x) < 150 && abs(y - spawn_y) < 150) {
-		spawn_x = -x;
-		spawn_y = -y;
-	}
-
-	Engine::CreateActorWithPosition("..\\GameEngine\\Bomb.json", Point2D(spawn_x, spawn_y));
 }
 
 void Gameplay::Initialize() {
 	Engine::Start();
+	Customize::User_Initialize();
+}
+
+void Gameplay::Update(int p_Width, int p_Height) {
+
+	Customize::User_Update(p_Width, p_Height);
+	Engine::Tick();
+}
+
+void Gameplay::TestKeyCallback(unsigned int i_VKeyID, bool p_WentDown)
+{
+#ifdef _DEBUG
+	const size_t	lenBuffer = 65;
+	char			Buffer[lenBuffer];
+
+	// quit
+	if (i_VKeyID == 0X0051) {
+		quit = true;
+	}
+	else {
+
+		player_info->ReceiveInput(i_VKeyID, p_WentDown);
+
+	}
+	// move to the right
+
+	sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, p_WentDown ? "down" : "up");
+	OutputDebugStringA(Buffer);
+#endif // __DEBUG
+}
+
+/*
+**************User Customization Is As Follows****************
+*/
+
+
+void Gameplay::Customize::User_Initialize() {
 	RegisterControllerCreator("AI", [](SmartPointer<GameObject>& i_GameObject, nlohmann::json& i_Initializer) {
 		assert(i_Initializer["decay_rate"].is_number_float());
 
@@ -195,39 +208,62 @@ void Gameplay::Initialize() {
 	Engine::CreateActorWithPosition("..\\GameEngine\\VerticalBrick.json", Point2D(1100.f, -500.f));
 }
 
-void RegisterControllerCreator(const std::string& i_ControllerName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> i_ControllerCreator)
-{
-	Engine::ControllerCreators->insert({ i_ControllerName, i_ControllerCreator });
-}
-
-void RegisterComponentCreator(const std::string& i_ComponentName, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> i_ComponentCreator)
-{
-	Engine::ComponentCreators->insert({ i_ComponentName, i_ComponentCreator });
-}
-
-void Gameplay::CreateMonsters(unsigned int round) {
-
-	CreateTurtle(round);
-
-	CreateGhost(round);
-
-	CreateBomb(round);
-
-}
-
-void Gameplay::Update(int width, int height) {
-
+void Gameplay::Customize::User_Update(int p_Width, int p_Height) {
 	for (BoxCollision* game_object : reinterpret_cast<BoxCollision*>(player_info->GetPlayer()->GetComponent(ComponentType::BoxCollision))->GetCollided()) {
 		if (game_object->GetChannel() == Channel::Pawn) {
-			game_lose = true;
+			Customize::game_lose = true;
 			break;
 		}
 	}
-	Engine::RemoveActorIfOutOfBorder(width, height);
-	Engine::Tick();
+	Engine::RemoveActorIfOutOfBorder(p_Width, p_Height);
 }
 
-void Gameplay::ShowEnding() {
+void CreateTurtle(unsigned int p_Round) {
+	for (unsigned int i = 0; i < p_Round + 1; i++) {
+		float rand_row = -250.0f + 170.f * (i - 1.f);
+		float rand_col = (i % 2) * 350.f - 1000.f;
+		Engine::CreateActorWithPosition("..\\GameEngine\\Turtle.json", Point2D(rand_col, rand_row));
+	}
+}
+
+void CreateGhost(unsigned int p_Round) {
+	Point2D base_vel(0.0f, -40.0f);
+	for (unsigned int i = 0; i < 2 * p_Round; i++) {
+		float cur_indi = (float)pow(-1, i % 2);
+		float rand_col = cur_indi * 550.f - cur_indi * 200.f * i;
+		float rand_row = cur_indi * 800.f;
+
+		Engine::CreateActorWithPositionAndVelocity("..\\GameEngine\\Ghost.json", Point2D(rand_col, rand_row), cur_indi * base_vel);
+	}
+}
+
+void CreateBomb(unsigned int p_Round) {
+	Point2D player_position = Gameplay::player_info->GetPlayer()->m_Position2D;
+	float x = player_position.X();
+	float y = player_position.Y();
+	float spawn_x = 0.0f;
+	float spawn_y = 0.0f;
+	if (abs(x - spawn_x) < 150 && abs(y - spawn_y) < 150) {
+		spawn_x = -x;
+		spawn_y = -y;
+	}
+
+	Engine::CreateActorWithPosition("..\\GameEngine\\Bomb.json", Point2D(spawn_x, spawn_y));
+}
+
+void Gameplay::Customize::CreateMonsters(unsigned int p_Round) {
+
+	CreateTurtle(p_Round);
+
+	CreateGhost(p_Round);
+
+	CreateBomb(p_Round);
+
+}
+
+
+
+void Gameplay::Customize::ShowEnding() {
 	if (game_lose) {
 		Engine::CreateActor("..\\GameEngine\\Lose.json");
 	}
@@ -235,26 +271,4 @@ void Gameplay::ShowEnding() {
 		Engine::CreateActor("..\\GameEngine\\Win.json");
 	}
 	Update(800, 450);
-}
-
-void Gameplay::TestKeyCallback(unsigned int i_VKeyID, bool bWentDown)
-{
-#ifdef _DEBUG
-	const size_t	lenBuffer = 65;
-	char			Buffer[lenBuffer];
-
-	// quit
-	if (i_VKeyID == 0X0051) {
-		bQuit = true;
-	}
-	else {
-
-		player_info->ReceiveInput(i_VKeyID, bWentDown);
-
-	}
-	// move to the right
-
-	sprintf_s(Buffer, lenBuffer, "VKey 0x%04x went %s\n", i_VKeyID, bWentDown ? "down" : "up");
-	OutputDebugStringA(Buffer);
-#endif // __DEBUG
 }
