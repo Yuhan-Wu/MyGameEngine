@@ -123,6 +123,9 @@
     <ClInclude Include="GameData.h">
       <Filter>Header Files\GameData</Filter>
     </ClInclude>
+    <ClInclude Include="MaskParser.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">

@@ -9,6 +9,7 @@ BoxCollision::BoxCollision()
 	CollisionData temp = CollisionData(center, extents);
 	m_Data = temp;
 	m_Channel = Channel::Static;
+	m_CollisionMask = 0x00;
 }
 
 BoxCollision::BoxCollision(SmartPointer<GameObject> p_GameObject, Point2D p_Center, Point2D p_Extent, std::string channel) {
@@ -16,6 +17,8 @@ BoxCollision::BoxCollision(SmartPointer<GameObject> p_GameObject, Point2D p_Cent
 	m_Data = temp;
 	EnumParser<Channel> parser;
 	m_Channel = parser.ParseSomeEnum(channel);
+	MaskParser mask_parser;
+	m_CollisionMask = mask_parser.ParseSomeMask(channel);
 
 	m_GameObject = p_GameObject;
 }
@@ -44,6 +47,10 @@ Point2D BoxCollision::GetExtents() {
 
 Channel BoxCollision::GetChannel() {
 	return m_Channel;
+}
+
+unsigned int BoxCollision::GetMask() {
+	return m_CollisionMask;
 }
 
 std::vector<BoxCollision*> BoxCollision::GetCollided() {

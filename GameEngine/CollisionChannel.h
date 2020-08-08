@@ -13,5 +13,3 @@ EnumParser<Channel>::EnumParser()
     enumMap["UI"] = Channel::UI;
     enumMap["Player"] = Channel::Player;
 }
-
-

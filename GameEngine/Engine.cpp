@@ -243,20 +243,12 @@ namespace Engine {
 			for (auto i = 0; i < World_GameObject->size() - 1; i++) {
 				SmartPointer<GameObject> Object_A = (*World_GameObject)[i];
 				BoxCollision* Box_A = reinterpret_cast<BoxCollision*>(Object_A->GetComponent(ComponentType::BoxCollision));
-				if (Box_A->GetChannel() == Channel::UI) {
-					continue;
-				}
+				unsigned int temp_mask = 1 << static_cast<int>(Box_A->GetChannel());
 				for (auto j = i + 1; j < World_GameObject->size(); j++) {
 					SmartPointer<GameObject> Object_B = (*World_GameObject)[j];
 					BoxCollision* Box_B = reinterpret_cast<BoxCollision*>(Object_B->GetComponent(ComponentType::BoxCollision));
-					//TODO: Use mask for collision rules
-					if (Box_B->GetChannel() == Channel::UI) {
-						continue;
-					}
-					else if (Box_B->GetChannel() == Channel::Static && Box_A->GetChannel() == Channel::Static) {
-						continue;
-					}
-					else if ((Box_A->GetChannel() != Channel::Player && Box_B->GetChannel() == Channel::OverlapAll) || (Box_A->GetChannel() == Channel::OverlapAll && Box_B->GetChannel() != Channel::Player)) {
+					//TODO: Debug
+					if (!(temp_mask & static_cast<int>(Box_B->GetMask()))) {
 						continue;
 					}
 					float collision_time = end;

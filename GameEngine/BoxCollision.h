@@ -2,6 +2,7 @@
 
 #include "GameData.h"
 #include "CollisionChannel.h"
+#include "MaskParser.h"
 
 class BoxCollision : public IGameObjectComponent
 {
@@ -26,6 +27,7 @@ public:
 	Point2D GetCenter();
 	Point2D GetExtents();
 	Channel GetChannel();
+	unsigned int GetMask();
 	void SetCollided(BoxCollision*);
 	void CleanCollided();
 	std::vector<BoxCollision*> GetCollided();
@@ -39,5 +41,6 @@ private:
 	SmartPointer<GameObject> m_GameObject;
 	CollisionData m_Data;
 	Channel m_Channel;
+	unsigned int m_CollisionMask;
 	std::vector<BoxCollision*> m_CollisionList;
 };

@@ -184,6 +184,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IGameObjectComponent.h" />
     <ClInclude Include="IGameObjectController.h" />
+    <ClInclude Include="MaskParser.h" />
     <ClInclude Include="Matrix44-inln.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="pch.h" />
