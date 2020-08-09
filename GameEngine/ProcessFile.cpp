@@ -72,7 +72,7 @@ void ProcessFile::operator()() {
 					Engine::JobSystem::RunJob("ProcessFileContents",
 						[pFileContents, Processor, ini_loc, pFinishEvent]()
 						{
-							Engine::FileProcess::ProcessFileContentsWithPosition(pFileContents, Processor, ini_loc, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, ini_loc, pFinishEvent);
 						},
 						"Default"
 							);
@@ -89,7 +89,7 @@ void ProcessFile::operator()() {
 					Engine::JobSystem::RunJob("ProcessFileContents",
 						[pFileContents, Processor, ini_loc, ini_vel, pFinishEvent]()
 						{
-							Engine::FileProcess::ProcessFileContentsWithPositionAndVelocity(pFileContents, Processor, ini_loc, ini_vel, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, ini_loc, ini_vel, pFinishEvent);
 						},
 						"Default"
 							);

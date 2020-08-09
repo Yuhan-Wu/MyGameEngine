@@ -13,9 +13,9 @@ class ProcessFile
 {
 public:
 	ProcessFile();
-	ProcessFile(const char* i_pFilename, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent = nullptr);
-	ProcessFile(const char* i_pFilename, Point2D initial, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Engine::Event* i_pFinishEvent = nullptr);
-	ProcessFile(const char* i_pFilename, Point2D initial, Point2D vel, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Engine::Event* i_pFinishEvent = nullptr);
+	ProcessFile(const char* p_Filename, std::function<void(std::vector<uint8_t>)> p_Processor, Engine::Event* p_FinishEvent = nullptr);
+	ProcessFile(const char* p_Filename, Point2D p_Initial, std::function<void(std::vector<uint8_t>, Point2D)> p_Processor, Engine::Event* p_FinishEvent = nullptr);
+	ProcessFile(const char* p_Filename, Point2D p_Initial, Point2D p_Vel, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> p_Processor, Engine::Event* p_FinishEvent = nullptr);
 	~ProcessFile();
 
 	void operator() ();

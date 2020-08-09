@@ -203,9 +203,9 @@ void Gameplay::Customize::User_Initialize() {
 
 	Engine::FileProcess::CreateActor("..\\GameEngine\\Player.json");
 	Engine::FileProcess::CreateActor("..\\GameEngine\\HorizontalBrick.json");
-	Engine::FileProcess::CreateActorWithPosition("..\\GameEngine\\HorizontalBrick.json", Point2D(0.f, -1250.f));
+	Engine::FileProcess::CreateActor("..\\GameEngine\\HorizontalBrick.json", Point2D(0.f, -1250.f));
 	Engine::FileProcess::CreateActor("..\\GameEngine\\VerticalBrick.json");
-	Engine::FileProcess::CreateActorWithPosition("..\\GameEngine\\VerticalBrick.json", Point2D(1100.f, -500.f));
+	Engine::FileProcess::CreateActor("..\\GameEngine\\VerticalBrick.json", Point2D(1100.f, -500.f));
 }
 
 void Gameplay::Customize::User_Update(int p_Width, int p_Height) {
@@ -222,7 +222,7 @@ void CreateTurtle(unsigned int p_Round) {
 	for (unsigned int i = 0; i < p_Round + 1; i++) {
 		float rand_row = -250.0f + 170.f * (i - 1.f);
 		float rand_col = (i % 2) * 350.f - 1000.f;
-		Engine::FileProcess::CreateActorWithPosition("..\\GameEngine\\Turtle.json", Point2D(rand_col, rand_row));
+		Engine::FileProcess::CreateActor("..\\GameEngine\\Turtle.json", Point2D(rand_col, rand_row));
 	}
 }
 
@@ -233,7 +233,7 @@ void CreateGhost(unsigned int p_Round) {
 		float rand_col = cur_indi * 550.f - cur_indi * 200.f * i;
 		float rand_row = cur_indi * 800.f;
 
-		Engine::FileProcess::CreateActorWithPositionAndVelocity("..\\GameEngine\\Ghost.json", Point2D(rand_col, rand_row), cur_indi * base_vel);
+		Engine::FileProcess::CreateActor("..\\GameEngine\\Ghost.json", Point2D(rand_col, rand_row), cur_indi * base_vel);
 	}
 }
 
@@ -248,7 +248,7 @@ void CreateBomb(unsigned int p_Round) {
 		spawn_y = -y;
 	}
 
-	Engine::FileProcess::CreateActorWithPosition("..\\GameEngine\\Bomb.json", Point2D(spawn_x, spawn_y));
+	Engine::FileProcess::CreateActor("..\\GameEngine\\Bomb.json", Point2D(spawn_x, spawn_y));
 }
 
 void Gameplay::Customize::CreateMonsters(unsigned int p_Round) {

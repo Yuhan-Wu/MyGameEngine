@@ -427,14 +427,14 @@ void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> PlayerData) {
 	}
 }
 
-void Engine::FileProcess::CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Point2D initial) {
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial) {
 	using json = nlohmann::json;
-	if (!PlayerData.empty())
+	if (!p_PlayerData.empty())
 	{
-		json PlayerJSON = json::parse(PlayerData);
+		json PlayerJSON = json::parse(p_PlayerData);
 		std::string name = PlayerJSON["name"];
 
-		Point2D initialPosition = initial;
+		Point2D initialPosition = p_Initial;
 	
 		SmartPointer<GameObject> Player = GameObject::Create(name, initialPosition, 0);
 		// GameObject Dummy;
@@ -474,14 +474,14 @@ void Engine::FileProcess::CreateGameObjectsWithPosition(std::vector<uint8_t> Pla
 	}
 }
 
-void Engine::FileProcess::CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, Point2D initial, Point2D vel) {
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial, Point2D p_Vel) {
 	using json = nlohmann::json;
-	if (!PlayerData.empty())
+	if (!p_PlayerData.empty())
 	{
-		json PlayerJSON = json::parse(PlayerData);
+		json PlayerJSON = json::parse(p_PlayerData);
 		std::string name = PlayerJSON["name"];
 
-		Point2D initialPosition = initial;
+		Point2D initialPosition = p_Initial;
 
 		SmartPointer<GameObject> Player = GameObject::Create(name, initialPosition, 0);
 		// GameObject Dummy;
@@ -516,7 +516,7 @@ void Engine::FileProcess::CreateGameObjectsWithPositionAndVelocity(std::vector<u
 			}
 
 		}
-		reinterpret_cast<PhysicsInfo*>(Player->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(vel);
+		reinterpret_cast<PhysicsInfo*>(Player->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(p_Vel);
 
 		AddNewGameObject(Player);
 	}
@@ -570,35 +570,35 @@ void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> PlayerData, s
 
 }
 
-void Engine::FileProcess::ProcessFileContentsWithPosition(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Point2D initial, Engine::Event* i_pFinishEvent) {
-	if (!PlayerData.empty())
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, Point2D)> p_Processor, Point2D p_Initial, Engine::Event* p_FinishEvent) {
+	if (!p_PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
-			i_Processor(PlayerData, initial);
+			p_Processor(p_PlayerData, p_Initial);
 
 		//delete[] i_pFileContents;
 	}
 
 	std::cout << "ProcessFileContents finished processing file.\n";
 
-	if (i_pFinishEvent)
-		i_pFinishEvent->Signal();
+	if (p_FinishEvent)
+		p_FinishEvent->Signal();
 
 }
 
-void Engine::FileProcess::ProcessFileContentsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Point2D initial,Point2D vel, Engine::Event* i_pFinishEvent) {
-	if (!PlayerData.empty())
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> p_Processor, Point2D p_Initial,Point2D p_Vel, Engine::Event* p_FinishEvent) {
+	if (!p_PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
-			i_Processor(PlayerData, initial, vel);
+			p_Processor(p_PlayerData, p_Initial, p_Vel);
 
 		//delete[] i_pFileContents;
 	}
 
 	std::cout << "ProcessFileContents finished processing file.\n";
 
-	if (i_pFinishEvent)
-		i_pFinishEvent->Signal();
+	if (p_FinishEvent)
+		p_FinishEvent->Signal();
 
 }
 
@@ -646,7 +646,7 @@ void Engine::FileProcess::CreateActor(const char* i_pScriptFilename) {
 	Engine::JobSystem::CreateQueue("Default", 2);
 
 	{
-		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, std::bind(CreateGameObjects, _1), nullptr)), "Default");
+		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, std::bind(static_cast<void (*) (std::vector<uint8_t>)>(&CreateGameObjects), std::placeholders::_1), nullptr)), "Default");
 
 		do
 		{
@@ -658,14 +658,14 @@ void Engine::FileProcess::CreateActor(const char* i_pScriptFilename) {
 	Engine::JobSystem::RequestShutdown();
 }
 
-void Engine::FileProcess::CreateActorWithPosition(const char* i_pScriptFilename, Point2D initial) {
+void Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
 	Engine::JobSystem::CreateQueue("Default", 2);
 
 	{
-		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, initial, std::bind(CreateGameObjectsWithPosition, _1, _2), nullptr)), "Default");
+		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, p_Initial, std::bind(static_cast<void (*) (std::vector<uint8_t>, Point2D)>(&CreateGameObjects), std::placeholders::_1, std::placeholders::_2), nullptr)), "Default");
 
 		do
 		{
@@ -677,14 +677,14 @@ void Engine::FileProcess::CreateActorWithPosition(const char* i_pScriptFilename,
 	Engine::JobSystem::RequestShutdown();
 }
 
-void Engine::FileProcess::CreateActorWithPositionAndVelocity(const char* i_pScriptFilename, Point2D initial, Point2D vel) {
+void Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial, Point2D p_Vel) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
 	Engine::JobSystem::CreateQueue("Default", 2);
 
 	{
-		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, initial, vel, std::bind(CreateGameObjectsWithPositionAndVelocity, _1, _2, _3), nullptr)), "Default");
+		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, p_Initial, p_Vel, std::bind(static_cast<void(*) (std::vector<uint8_t>, Point2D, Point2D)>(&CreateGameObjects), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), nullptr)), "Default");
 
 		do
 		{

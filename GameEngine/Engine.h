@@ -22,16 +22,18 @@ namespace Engine {
 	void Clean();
 	
 	namespace FileProcess {
-		std::vector<uint8_t> LoadFile(const char* i_pScriptFilename);
-		void CreateGameObjects(std::vector<uint8_t> i_pFileContents);
-		void CreateGameObjectsWithPosition(std::vector<uint8_t> PlayerData, Point2D initial);
-		void CreateGameObjectsWithPositionAndVelocity(std::vector<uint8_t> PlayerData, Point2D initial, Point2D vel);
-		void ProcessFileContents(std::vector<uint8_t> i_pFileContents, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent = nullptr);
-		void ProcessFileContentsWithPosition(std::vector<uint8_t> i_pFileContents, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Point2D initial, Engine::Event* i_pFinishEvent = nullptr);
-		void ProcessFileContentsWithPositionAndVelocity(std::vector<uint8_t> i_pFileContents, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Point2D initial, Point2D vel, Engine::Event* i_pFinishEvent = nullptr);
-		void CreateActor(const char* i_pScriptFilename);
-		void CreateActorWithPosition(const char* i_pScriptFilename, Point2D initial);
-		void CreateActorWithPositionAndVelocity(const char* i_pScriptFilename, Point2D initial, Point2D vel);
+		std::vector<uint8_t> LoadFile(const char* p_ScriptFilename);
+		void CreateGameObjects(std::vector<uint8_t> p_FileContents);
+		void CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial);
+		void CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial, Point2D p_Vel);
+		
+		void ProcessFileContents(std::vector<uint8_t> p_FileContents, std::function<void(std::vector<uint8_t>)> p_Processor, Engine::Event* p_FinishEvent = nullptr);
+		void ProcessFileContents(std::vector<uint8_t> p_FileContents, std::function<void(std::vector<uint8_t>, Point2D)> p_Processor, Point2D p_Initial, Engine::Event* p_FinishEvent = nullptr);
+		void ProcessFileContents(std::vector<uint8_t> p_FileContents, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> p_Processor, Point2D p_Initial, Point2D p_Vel, Engine::Event* p_FinishEvent = nullptr);
+		
+		void CreateActor(const char* p_ScriptFilename);
+		void CreateActor(const char* p_ScriptFilename, Point2D p_Initial);
+		void CreateActor(const char* p_ScriptFilename, Point2D p_Initial, Point2D p_Vel);
 	}
 
 	namespace Game {
