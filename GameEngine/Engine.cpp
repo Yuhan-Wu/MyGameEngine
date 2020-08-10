@@ -21,7 +21,7 @@ namespace Engine {
 	std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >* ControllerCreators = nullptr;
 	std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >* ComponentCreators = nullptr;
 	std::vector<SmartPointer<GameObject>>* World_GameObject = nullptr;
-	std::vector<SmartPointer<GameObject>>* New_GameObject = nullptr;
+	std::map<std::string, SmartPointer<GameObject>>* New_GameObject = nullptr;
 
 	namespace CollisionSystem {
 		float GetSmaller(float op1, float op2) {
@@ -310,7 +310,7 @@ void Engine::Start() {
 	Engine::ControllerCreators = new std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >();
 	Engine::ComponentCreators = new std::map<std::string, std::function<void(SmartPointer<GameObject>&, nlohmann::json&)> >();
 	Engine::World_GameObject = new std::vector<SmartPointer<GameObject>>();
-	Engine::New_GameObject = new std::vector<SmartPointer<GameObject>>();
+	Engine::New_GameObject = new std::map<std::string, SmartPointer<GameObject>>();
 	JobSystem::InitJobSystem();
 }
 
@@ -349,12 +349,13 @@ void Engine::Tick(float p_DeltaTime) {
 }
 
 void Engine::Clean() {
-	while (New_GameObject->size() != 0)
+	std::map < std:: string, SmartPointer<GameObject> > ::iterator it;
+
+	for (it = New_GameObject->begin(); it != New_GameObject->end(); it++)
 	{
-		New_GameObject->back()->ReleaseAll();
-		New_GameObject->back().Clean();
-		New_GameObject->back() = nullptr;
-		New_GameObject->pop_back();
+		it->second->ReleaseAll();
+		it->second.Clean();
+		it->second = nullptr;
 	}
 	while (World_GameObject->size() != 0)
 	{
@@ -379,8 +380,8 @@ void Engine::Clean() {
 }
 
 void operator<<(Point2D& vec, nlohmann::json& json_obj);
-void AddNewGameObject(SmartPointer<GameObject> i_pNewGameObject);
-void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> PlayerData) {
+void AddNewGameObject(SmartPointer<GameObject> i_pNewGameObject, std::string p_ID);
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> PlayerData, std::string p_ID) {
 	using json = nlohmann::json;
 	if (!PlayerData.empty())
 	{
@@ -423,11 +424,11 @@ void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> PlayerData) {
 
 		}
 
-		AddNewGameObject(Player);
+		AddNewGameObject(Player, p_ID);
 	}
 }
 
-void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial) {
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, std::string p_ID, Point2D p_Initial) {
 	using json = nlohmann::json;
 	if (!p_PlayerData.empty())
 	{
@@ -470,11 +471,11 @@ void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, P
 
 		}
 
-		AddNewGameObject(Player);
+		AddNewGameObject(Player, p_ID);
 	}
 }
 
-void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, Point2D p_Initial, Point2D p_Vel) {
+void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, std::string p_ID, Point2D p_Initial, Point2D p_Vel) {
 	using json = nlohmann::json;
 	if (!p_PlayerData.empty())
 	{
@@ -518,7 +519,7 @@ void Engine::FileProcess::CreateGameObjects(std::vector<uint8_t> p_PlayerData, P
 		}
 		reinterpret_cast<PhysicsInfo*>(Player->GetComponent(ComponentType::PhysicsInfo))->SetCurVel(p_Vel);
 
-		AddNewGameObject(Player);
+		AddNewGameObject(Player, p_ID);
 	}
 }
 
@@ -554,11 +555,11 @@ std::vector<uint8_t> Engine::FileProcess::LoadFile(const char* i_pScriptFilename
 	return Buffer;
 }
 
-void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent) {
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> PlayerData, std::function<void(std::vector<uint8_t>, std::string)> i_Processor, std::string p_ID, Engine::Event* i_pFinishEvent) {
 	if (!PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
-			i_Processor(PlayerData);
+			i_Processor(PlayerData, p_ID);
 
 		//delete[] i_pFileContents;
 	}
@@ -570,11 +571,11 @@ void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> PlayerData, s
 
 }
 
-void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, Point2D)> p_Processor, Point2D p_Initial, Engine::Event* p_FinishEvent) {
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, std::string, Point2D)> p_Processor, std::string p_ID, Point2D p_Initial, Engine::Event* p_FinishEvent) {
 	if (!p_PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
-			p_Processor(p_PlayerData, p_Initial);
+			p_Processor(p_PlayerData, p_ID, p_Initial);
 
 		//delete[] i_pFileContents;
 	}
@@ -586,11 +587,11 @@ void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData,
 
 }
 
-void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> p_Processor, Point2D p_Initial,Point2D p_Vel, Engine::Event* p_FinishEvent) {
+void Engine::FileProcess::ProcessFileContents(std::vector<uint8_t> p_PlayerData, std::function<void(std::vector<uint8_t>, std::string, Point2D, Point2D)> p_Processor, std::string p_ID, Point2D p_Initial,Point2D p_Vel, Engine::Event* p_FinishEvent) {
 	if (!p_PlayerData.empty())
 	{
 		if (!Engine::JobSystem::ShutdownRequested())
-			p_Processor(p_PlayerData, p_Initial, p_Vel);
+			p_Processor(p_PlayerData, p_ID, p_Initial, p_Vel);
 
 		//delete[] i_pFileContents;
 	}
@@ -610,90 +611,112 @@ void operator<<(Point2D& vec, nlohmann::json& json_obj)
 }
 
 Engine::Mutex NewGameObjectMutex;
-void AddNewGameObject(SmartPointer<GameObject> i_pNewGameObject)
+void AddNewGameObject(SmartPointer<GameObject> i_pNewGameObject, std::string p_ID)
 {
 	if (i_pNewGameObject)
 	{
 		// Acquire a scoped lock on the mutex
 		Engine::ScopeLock Lock(NewGameObjectMutex);
 
-		Engine::New_GameObject->push_back(i_pNewGameObject);
+		(*(Engine::New_GameObject))[p_ID] = i_pNewGameObject;
 	}
 }
-void CheckForNewGameObjects()
+bool CheckForNewGameObjects(std::string p_ID, SmartPointer<GameObject>& o_GameObject)
 {
 	Engine::ScopeLock Lock(NewGameObjectMutex);
 
 	if (!Engine::New_GameObject->empty())
 	{
-		for (SmartPointer<GameObject> p : *(Engine::New_GameObject))
-		{
-			if (p)
-			{
-				std::cout << "Moving " << p->m_Name << " to AllObjects.\n";
-				Engine::World_GameObject->push_back(p);
-			}
+		std::map < std::string , SmartPointer<GameObject> > ::iterator it;
+		it = Engine::New_GameObject->find(p_ID);
+		if (it != Engine::New_GameObject->end()) {
+			o_GameObject = it->second;
+			std::cout << "Moving " << o_GameObject->m_Name << " to AllObjects.\n";
+			Engine::World_GameObject->push_back(o_GameObject);
+			Engine::New_GameObject->erase(p_ID);
+			return true;
 		}
+		return false;
 
-		Engine::New_GameObject->clear();
 	}
+	return false;
 }
 
-void Engine::FileProcess::CreateActor(const char* i_pScriptFilename) {
+std::string gen_random6() {
+	static const char alphanum[] =
+		"0123456789"
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz";
+	std::string s = "";
+	for (int i = 0; i < 6; ++i) {
+		s += alphanum[rand() % (sizeof(alphanum) - 1)];
+	}
+	return s;
+}
+
+SmartPointer<GameObject> Engine::FileProcess::CreateActor(const char* i_pScriptFilename) {
+	// using json = nlohmann::json;
+	using namespace std::placeholders;
+	// Engine::Event* pFinishEvent = m_pFinishEvent;
+	SmartPointer<GameObject> game_object;
+	std::string rand_id = gen_random6();
+	Engine::JobSystem::CreateQueue("Default", 2);
+
+	{
+		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, rand_id, std::bind(static_cast<void (*) (std::vector<uint8_t>, std::string)>(&CreateGameObjects), _1, _2), nullptr)), "Default");
+
+		do
+		{
+			CheckForNewGameObjects(rand_id, game_object);
+			Sleep(10);
+		} while (Engine::JobSystem::HasJobs("Default"));
+	}
+	CheckForNewGameObjects(rand_id, game_object);
+	Engine::JobSystem::RequestShutdown();
+	return game_object;
+}
+
+SmartPointer<GameObject> Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
 	Engine::JobSystem::CreateQueue("Default", 2);
-
+	SmartPointer<GameObject> game_object;
+	std::string rand_id = gen_random6();
 	{
-		Engine::JobSystem::RunJob(i_pScriptFilename, std::bind(ProcessFile(i_pScriptFilename, std::bind(static_cast<void (*) (std::vector<uint8_t>)>(&CreateGameObjects), std::placeholders::_1), nullptr)), "Default");
+		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, rand_id, p_Initial, std::bind(static_cast<void (*) (std::vector<uint8_t>, std::string, Point2D)>(&CreateGameObjects), _1, _2, _3), nullptr)), "Default");
 
 		do
 		{
-			CheckForNewGameObjects();
+			CheckForNewGameObjects(rand_id, game_object);
 			Sleep(10);
 		} while (Engine::JobSystem::HasJobs("Default"));
 	}
-	CheckForNewGameObjects();
+	CheckForNewGameObjects(rand_id, game_object);
 	Engine::JobSystem::RequestShutdown();
+	return game_object;
 }
 
-void Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial) {
+SmartPointer<GameObject> Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial, Point2D p_Vel) {
 	// using json = nlohmann::json;
 	using namespace std::placeholders;
 	// Engine::Event* pFinishEvent = m_pFinishEvent;
+	SmartPointer<GameObject> game_object;
+	std::string rand_id = gen_random6();
 	Engine::JobSystem::CreateQueue("Default", 2);
 
 	{
-		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, p_Initial, std::bind(static_cast<void (*) (std::vector<uint8_t>, Point2D)>(&CreateGameObjects), std::placeholders::_1, std::placeholders::_2), nullptr)), "Default");
+		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, rand_id, p_Initial, p_Vel, std::bind(static_cast<void (*) (std::vector<uint8_t>,std::string, Point2D, Point2D)>(&CreateGameObjects), _1, _2, _3, _4), nullptr)), "Default");
 
 		do
 		{
-			CheckForNewGameObjects();
+			CheckForNewGameObjects(rand_id, game_object);
 			Sleep(10);
 		} while (Engine::JobSystem::HasJobs("Default"));
 	}
-	CheckForNewGameObjects();
+	CheckForNewGameObjects(rand_id, game_object);
 	Engine::JobSystem::RequestShutdown();
-}
-
-void Engine::FileProcess::CreateActor(const char* p_ScriptFilename, Point2D p_Initial, Point2D p_Vel) {
-	// using json = nlohmann::json;
-	using namespace std::placeholders;
-	// Engine::Event* pFinishEvent = m_pFinishEvent;
-	Engine::JobSystem::CreateQueue("Default", 2);
-
-	{
-		Engine::JobSystem::RunJob(p_ScriptFilename, std::bind(ProcessFile(p_ScriptFilename, p_Initial, p_Vel, std::bind(static_cast<void(*) (std::vector<uint8_t>, Point2D, Point2D)>(&CreateGameObjects), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), nullptr)), "Default");
-
-		do
-		{
-			CheckForNewGameObjects();
-			Sleep(10);
-		} while (Engine::JobSystem::HasJobs("Default"));
-	}
-	CheckForNewGameObjects();
-	Engine::JobSystem::RequestShutdown();
+	return game_object;
 }
 
 void Engine::Game::RemoveActorIfOutOfBorder(int width, int height) {

@@ -201,7 +201,8 @@ void Gameplay::Customize::User_Initialize() {
 		}
 	);
 
-	Engine::FileProcess::CreateActor("..\\GameEngine\\Player.json");
+	SmartPointer<GameObject> player = Engine::FileProcess::CreateActor("..\\GameEngine\\Player.json");
+	assert(player!= nullptr);
 	Engine::FileProcess::CreateActor("..\\GameEngine\\HorizontalBrick.json");
 	Engine::FileProcess::CreateActor("..\\GameEngine\\HorizontalBrick.json", Point2D(0.f, -1250.f));
 	Engine::FileProcess::CreateActor("..\\GameEngine\\VerticalBrick.json");

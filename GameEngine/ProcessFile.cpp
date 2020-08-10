@@ -7,19 +7,19 @@ ProcessFile::ProcessFile() {
 	m_pFinishEvent = nullptr;
 }
 
-ProcessFile::ProcessFile(const char* i_pFilename, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent) :
-	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_Processor(i_Processor) {
+ProcessFile::ProcessFile(const char* i_pFilename, std::string p_ID, std::function<void(std::vector<uint8_t>, std::string)> i_Processor, Engine::Event* i_pFinishEvent) :
+	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_Processor(i_Processor), m_ID(p_ID) {
 	assert(m_pFilename);
 }
 
-ProcessFile::ProcessFile(const char* i_pFilename, Point2D initial, std::function<void(std::vector<uint8_t>, Point2D)> i_Processor, Engine::Event* i_pFinishEvent) :
-	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_initial(initial), m_ProcessorWithPosition(i_Processor) {
+ProcessFile::ProcessFile(const char* i_pFilename, std::string p_ID, Point2D initial, std::function<void(std::vector<uint8_t>, std::string, Point2D)> i_Processor, Engine::Event* i_pFinishEvent) :
+	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_initial(initial), m_ProcessorWithPosition(i_Processor), m_ID(p_ID) {
 	assert(m_pFilename);
 	type = ProcessType::WithPosition;
 }
 
-ProcessFile::ProcessFile(const char* i_pFilename, Point2D initial, Point2D vel, std::function<void(std::vector<uint8_t>, Point2D, Point2D)> i_Processor, Engine::Event* i_pFinishEvent) :
-	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_initial(initial), m_vel(vel), m_ProcessorWithPositionAndVel(i_Processor) {
+ProcessFile::ProcessFile(const char* i_pFilename, std::string p_ID, Point2D initial, Point2D vel, std::function<void(std::vector<uint8_t>, std::string, Point2D, Point2D)> i_Processor, Engine::Event* i_pFinishEvent) :
+	m_pFilename(i_pFilename), m_pFinishEvent(i_pFinishEvent), m_initial(initial), m_vel(vel), m_ProcessorWithPositionAndVel(i_Processor), m_ID(p_ID) {
 	assert(m_pFilename);
 	type = ProcessType::WithPosAndVel;
 }
@@ -51,13 +51,14 @@ void ProcessFile::operator()() {
 				case ProcessType::PureActor:
 				{
 					// this works around C++11 issue with capturing member variable by value
-					std::function<void(std::vector<uint8_t>)> Processor = m_Processor;
+					std::function<void(std::vector<uint8_t>, std::string)> Processor = m_Processor;
 					Engine::Event* pFinishEvent = m_pFinishEvent;
+					std::string id = m_ID;
 
 					Engine::JobSystem::RunJob("ProcessFileContents",
-						[pFileContents, Processor, pFinishEvent]()
+						[pFileContents, Processor, pFinishEvent, id]()
 						{
-							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, id, pFinishEvent);
 						},
 						"Default"
 							);
@@ -66,14 +67,15 @@ void ProcessFile::operator()() {
 					break;
 				case ProcessType::WithPosition:
 				{
-					std::function<void(std::vector<uint8_t>, Point2D)> Processor = m_ProcessorWithPosition;
+					std::function<void(std::vector<uint8_t>, std::string, Point2D)> Processor = m_ProcessorWithPosition;
 					Engine::Event* pFinishEvent = m_pFinishEvent;
 					Point2D ini_loc = m_initial;
+					std::string id = m_ID;
 
 					Engine::JobSystem::RunJob("ProcessFileContents",
-						[pFileContents, Processor, ini_loc, pFinishEvent]()
+						[pFileContents, Processor, id, ini_loc, pFinishEvent]()
 						{
-							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, ini_loc, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, id, ini_loc, pFinishEvent);
 						},
 						"Default"
 							);
@@ -82,15 +84,16 @@ void ProcessFile::operator()() {
 					break;
 				case ProcessType::WithPosAndVel:
 				{
-					std::function<void(std::vector<uint8_t>, Point2D, Point2D)> Processor = m_ProcessorWithPositionAndVel;
+					std::function<void(std::vector<uint8_t>, std::string, Point2D, Point2D)> Processor = m_ProcessorWithPositionAndVel;
 					Engine::Event* pFinishEvent = m_pFinishEvent;
 					Point2D ini_loc = m_initial;
 					Point2D ini_vel = m_vel;
+					std::string id = m_ID;
 
 					Engine::JobSystem::RunJob("ProcessFileContents",
-						[pFileContents, Processor, ini_loc, ini_vel, pFinishEvent]()
+						[pFileContents, Processor, id, ini_loc, ini_vel, pFinishEvent]()
 						{
-							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, ini_loc, ini_vel, pFinishEvent);
+							Engine::FileProcess::ProcessFileContents(pFileContents, Processor, id, ini_loc, ini_vel, pFinishEvent);
 						},
 						"Default"
 							);
