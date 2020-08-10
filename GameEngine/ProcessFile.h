@@ -5,8 +5,8 @@
 #include "JobSystem/IJob.h"
 #include "Syncronization/Events.h"
 
-enum ProcessType {
-	PureActor, WithPosition, WithPosAndVel
+enum class ProcessType {
+	PureActor = 0, WithPosition = 1, WithPosAndVel = 2
 };
 
 class ProcessFile

@@ -3,7 +3,8 @@
 #include "Engine.h"
 
 ProcessFile::ProcessFile() {
-
+	m_pFilename = nullptr;
+	m_pFinishEvent = nullptr;
 }
 
 ProcessFile::ProcessFile(const char* i_pFilename, std::function<void(std::vector<uint8_t>)> i_Processor, Engine::Event* i_pFinishEvent) :
@@ -47,7 +48,7 @@ void ProcessFile::operator()() {
 
 				switch (type)
 				{
-				case 0:
+				case ProcessType::PureActor:
 				{
 					// this works around C++11 issue with capturing member variable by value
 					std::function<void(std::vector<uint8_t>)> Processor = m_Processor;
@@ -63,7 +64,7 @@ void ProcessFile::operator()() {
 
 				}
 					break;
-				case 1:
+				case ProcessType::WithPosition:
 				{
 					std::function<void(std::vector<uint8_t>, Point2D)> Processor = m_ProcessorWithPosition;
 					Engine::Event* pFinishEvent = m_pFinishEvent;
@@ -79,7 +80,7 @@ void ProcessFile::operator()() {
 
 				}
 					break;
-				case 2:
+				case ProcessType::WithPosAndVel:
 				{
 					std::function<void(std::vector<uint8_t>, Point2D, Point2D)> Processor = m_ProcessorWithPositionAndVel;
 					Engine::Event* pFinishEvent = m_pFinishEvent;
